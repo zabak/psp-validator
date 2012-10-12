@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging, sys, os
-
-# pridame lokalni knihovny
-sys.path.append(os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','python2.7'))
+from lxml import etree
 
 from directories import WorkDir
+project_dir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
 
 _logger = None
 _workdir = None
+
+def set_logger_level(level):
+    _logger.setLevel(level)
 
 def get_logger():
     global _logger
@@ -15,7 +17,7 @@ def get_logger():
         _logger = logging.getLogger("PSP_VALIDATION")
         # %d (%F{1}:%L)         %-15c   - %p - %m %n
         formatter = logging.Formatter('%(asctime)s %(name)s\t%(levelname)s \t- %(message)s')
-        _logger.setLevel(logging.INFO)
+        _logger.setLevel(logging.ERROR)
         ch = logging.StreamHandler()
         ch.setFormatter(formatter)
         _logger.addHandler(ch)
@@ -24,9 +26,26 @@ def get_logger():
 def get_workdir():
     global _workdir
     if not _workdir:
-        _workdir = WorkDir(tmpbase = os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'tmp'))
+        _workdir = WorkDir(tmpbase = os.path.join(project_dir,'tmp'))
     return _workdir
 
 logger = get_logger()
 workdir = get_workdir()
+
+fname = os.path.join(project_dir,"lib","schema","mets.xsd")
+
+def inSchemaDir(schema):
+    return os.path.join(project_dir,"lib","schema",schema)
+
+schema_catalog = { 
+    'mets': { 'uri': "http://www.loc.gov/mods/v3",
+              'location': inSchemaDir("mets.xsd"),
+              },
+    'dc':   { 'uri': "",
+              'location': inSchemaDir("oai_dc.xsd"),
+              },
+    'mods': { 'uri':"http://www.loc.gov/mods/v3",
+              'location': inSchemaDir("mods-3-4.xsd"),
+              }
+    }
 
