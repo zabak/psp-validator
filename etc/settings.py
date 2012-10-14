@@ -49,6 +49,10 @@ schema_catalog = {
               },
     'xlink': {'uri': "http://www.w3.org/1999/xlink",
               'location': ""
-        }
+        },
+    'mix': { 'uri': "http://www.loc.gov/mix/v20",
+             'location': withSchemaDir("mix20.xsd"),
+
+        },
     }
 
