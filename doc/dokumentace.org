@@ -1,0 +1,160 @@
+#+TITLE: PSP-validátor
+* dokumentace
+  :PROPERTIES:
+  :ID:       20d91565-bc03-4147-8d00-b59825f48f37
+  :END:
+** ve zkratce
+   :PROPERTIES:
+   :ID:       1cb9f0aa-7ba2-4bce-bc0d-3dffe29e7a8a
+   :END:
+   * umi jednu verzi schematu
+   * schema se vyvyji
+   * budou chodit emaily
+   * komunikace v cestine
+   * repozitar na code.google.com
+   * software bude v anglicntine
+   * prubezne verze standardu se nebudou publikovat
+   * zapojeni krajske knihovny do testovani - posilali by testovaci data pro testovani
+   * program by nemel skoncit na prvni chybe. protoze se schema vyvyji a neco uz nemusi byt chybou
+   * tentyz program by mel byt k dispozici na webu pro krajske knihovny, aby si mohly dopredu zkontrolovat data
+   * program bude mit volbu:
+     - kontrolovat jen metadata (mets soubor)
+     - zkontrolvoat vsechno, vcetne metadat
+     - vypnout kontrolu ciselniku
+   * udelat instalator pro windows
+   * vystup bude v textovem souboru
+
+** instalace vývojové verze programu
+   Vývojové větve se používají při testování.
+   
+   Používá se větev =develop=.
+
+*** linux
+**** instalace python 2.7
+     
+*** windows
+**** instalace python 2.7
+***** stáhnout aktuální verzi pythonu http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi
+      a nainstalovat ji.
+***** nastavení cesty k binárkám pythonu
+      aby se dal volat python v =cmd=.
+      
+**** instalace lxml
+     http://lxml.de/build.html#static-linking-on-windows
+     
+     musí se stáhnout zdrojové texty balíčku =lxml=.
+     
+     Poté se musí stáhnout aktuální zdrojové texty pridružených knihoven z ftp://ftp.zlatkovic.com/pub/libxml/.
+     
+** instalace vydané verze programu
+*** linux
+    
+*** windows
+   
+** volání programu
+   :PROPERTIES:
+   :ID:       4b49694e-cd6c-4454-b479-c8684a2b4160
+   :END:
+   #+BEGIN_SRC sh :results output verbatim :exports both
+    /opt/psp-validator/bin/validate-psp.py --help
+   #+END_SRC
+
+   #+RESULTS:
+   #+begin_example
+   usage: validate-psp.py [-h] [-m] [-v] [--version] [-l] [-d] [-i INFO]
+			  [-p PARTIAL]
+			  [PSP]
+
+   Program validuje PSP balíček.
+
+   Umí validovat na třech úrovních:
+   - METS soubor
+   - hodnoty z číselníků existují
+   - linky, na ktere se v balíčku odkazuje existují
+
+     Každá z těchto voleb se dá vypnout.
+
+   Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-13-NXoBxS
+
+   positional arguments:
+     PSP                   cesta k PSP balíčku
+
+   optional arguments:
+     -h, --help            show this help message and exit
+     -m, --mets            Zkontroluje METS soubor
+     -v, --verbose         hlášky programu budou podrobnější
+     --version             verze programu. Vypíše i verzi dokumentace, co popisuje strukturu PSP balíčku
+     -l, --list-validators
+			   zobrazí seznam validací, co program umí
+     -d, --debug           zobrazí ladici hlasky
+     -i INFO, --info INFO  zobrazí popis vybrané validace
+     -p PARTIAL, --partial PARTIAL
+			   zavola jen jeden kontretni krok validace. Seznam validaci vypisuje argument -l
+#+end_example
+
+*** přehled dostupných validací
+   #+BEGIN_SRC sh :results output verbatim :exports both
+   /opt/psp-validator/bin/validate-psp.py -m -v -l
+   #+END_SRC
+
+   #+RESULTS:
+   : seznam validací:
+   : 	01_mets
+   : 	02_mets_mods
+   : 	03_mets_dc
+
+    
+*** příklad validace METS souboru
+    [[id:4b49694e-cd6c-4454-b479-c8684a2b4160][volání programu]]
+
+   #+BEGIN_SRC sh :results output verbatim :exports both
+   /opt/psp-validator/bin/validate-psp.py -m -v -d /opt/psp-validator/tmp/2012_09_18_NDK000000000169_MD01_2.zip 2>&1
+   #+END_SRC
+
+   #+RESULTS:
+   #+begin_example
+   2012-10-13 05:58:24,680 PSP_VALIDATION	INFO 	- budu validovat soubor /opt/psp-validator/tmp/2012_09_18_NDK000000000169_MD01_2.zip
+   2012-10-13 05:58:24,680 PSP_VALIDATION	INFO 	- validator: validace METS souboru
+   2012-10-13 05:58:24,721 PSP_VALIDATION	INFO 	- nacitam schema: /opt/psp-validator/lib/schema/mets.xsd
+   2012-10-13 05:58:25,259 PSP_VALIDATION	DEBUG 	- volam schema.validate
+   2012-10-13 05:58:25,269 PSP_VALIDATION	DEBUG 	- vysledek schema.validate:True
+   2012-10-13 05:58:25,270 PSP_VALIDATION	INFO 	- validator: validace vnitrku METS souboru
+   2012-10-13 05:58:25,273 PSP_VALIDATION	DEBUG 	- nalezene mods elementy: [<Element {http://www.loc.gov/mods/v3}mods at 0xb6c54cd4>]
+   2012-10-13 05:58:25,274 PSP_VALIDATION	INFO 	- nacitam schema: /opt/psp-validator/lib/schema/mods-3-4.xsd
+   2012-10-13 05:58:26,271 PSP_VALIDATION	DEBUG 	- vysledky schema.validate:[True]
+   2012-10-13 05:58:26,271 PSP_VALIDATION	ERROR 	- chyby validace: [True]
+#+end_example
+
+** jednotlivé validace
+*** validovaní METS souboru
+**** ~01_mets~
+    #+BEGIN_SRC sh :results output verbatim :exports both
+     /opt/psp-validator/bin/validate-psp.py -i 01_mets
+    #+END_SRC     
+
+    #+RESULTS:
+    :  validace METS souboru
+    :         @group: mets
+    :         validuje METS soubor podle specifikace METS
+
+**** ~02_mets_mods~
+    #+BEGIN_SRC sh :results output verbatim  :exports both
+     /opt/psp-validator/bin/validate-psp.py -i 02_mets_mods
+    #+END_SRC     
+
+    #+RESULTS:
+    :  validace vnitrku METS souboru
+    :         @group: mets
+    :         validuje vnitrni polozky MODS v METS soubor podle specifikace MODS
+
+**** ~03_mets_dc~
+    #+BEGIN_SRC sh :results output verbatim  :exports both
+     /opt/psp-validator/bin/validate-psp.py -i 03_mets_dc
+    #+END_SRC     
+
+    #+RESULTS:
+    :  validace vnitrku METS souboru, specifikace DC
+    :         @group: mets
+    :         validuje vnitrni polozky DC v METS soubor podle specifikace Dublin Core
+
+     
