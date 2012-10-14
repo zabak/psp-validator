@@ -92,6 +92,18 @@
 			   zavola jen jeden kontretni krok validace. Seznam validaci vypisuje argument -l
 #+end_example
 
+*** přehled dostupných validací
+   #+BEGIN_SRC sh :results output verbatim :exports both
+   /opt/psp-validator/bin/validate-psp.py -m -v -l
+   #+END_SRC
+
+   #+RESULTS:
+   : seznam validací:
+   : 	01_mets
+   : 	02_mets_mods
+   : 	03_mets_dc
+
+    
 *** příklad validace METS souboru
     [[id:4b49694e-cd6c-4454-b479-c8684a2b4160][volání programu]]
 

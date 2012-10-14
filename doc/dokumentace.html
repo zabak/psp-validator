@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <meta name="title" content="PSP-validátor"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-13 06:06:34 CEST"/>
+<meta name="generated" content="2012-10-14 20:55:55 CEST"/>
 <meta name="author" content="Jan Stavel"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -115,7 +115,8 @@
 </li>
 <li><a href="#sec-1-4">1.4 volání programu</a>
 <ul>
-<li><a href="#sec-1-4-1">1.4.1 příklad validace METS souboru</a></li>
+<li><a href="#sec-1-4-1">1.4.1 přehled dostupných validací</a></li>
+<li><a href="#sec-1-4-2">1.4.2 příklad validace METS souboru</a></li>
 </ul>
 </li>
 <li><a href="#sec-1-5">1.5 jednotlivé validace</a>
@@ -297,7 +298,7 @@ Umí validovat na třech úrovních:
 
   Každá z těchto voleb se dá vypnout.
 
-Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-13-0xdSvX
+Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-14-jiwrA8
 
 positional arguments:
   PSP                   cesta k PSP balíčku
@@ -320,8 +321,32 @@ optional arguments:
 </div>
 
 <div id="outline-container-1-4-1" class="outline-4">
-<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> příklad validace METS souboru</h4>
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> přehled dostupných validací</h4>
 <div class="outline-text-4" id="text-1-4-1">
+
+
+
+
+<pre class="src src-sh">/opt/psp-validator/bin/validate-psp.py -m -v -l
+</pre>
+
+
+<pre class="example">
+seznam validací:
+	01_mets
+	02_mets_mods
+	03_mets_dc
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> příklad validace METS souboru</h4>
+<div class="outline-text-4" id="text-1-4-2">
 
 <p>    <a href="#sec-1-4">volání programu</a>
 </p>
@@ -335,16 +360,19 @@ optional arguments:
 
    
 
-<pre class="example">2012-10-13 06:06:29,185 PSP_VALIDATION       INFO    - budu validovat soubor /opt/psp-validator/tmp/2012_09_18_NDK000000000169_MD01_2.zip
-2012-10-13 06:06:29,185 PSP_VALIDATION       INFO    - validator: validace METS souboru
-2012-10-13 06:06:29,224 PSP_VALIDATION       INFO    - nacitam schema: /opt/psp-validator/lib/schema/mets.xsd
-2012-10-13 06:06:29,500 PSP_VALIDATION       DEBUG   - volam schema.validate
-2012-10-13 06:06:29,513 PSP_VALIDATION       DEBUG   - vysledek schema.validate:True
-2012-10-13 06:06:29,514 PSP_VALIDATION       INFO    - validator: validace vnitrku METS souboru
-2012-10-13 06:06:29,517 PSP_VALIDATION       DEBUG   - nalezene mods elementy: [&lt;Element {http://www.loc.gov/mods/v3}mods at 0xb6c2bcd4&gt;]
-2012-10-13 06:06:29,517 PSP_VALIDATION       INFO    - nacitam schema: /opt/psp-validator/lib/schema/mods-3-4.xsd
-2012-10-13 06:06:30,910 PSP_VALIDATION       DEBUG   - vysledky schema.validate:[True]
-2012-10-13 06:06:30,910 PSP_VALIDATION       ERROR   - chyby validace: [True]
+<pre class="example">2012-10-14 20:55:39,376 PSP_VALIDATION       INFO    - budu validovat soubor /opt/psp-validator/tmp/2012_09_18_NDK000000000169_MD01_2.zip
+2012-10-14 20:55:39,376 PSP_VALIDATION       INFO    - validator: validace METS souboru
+2012-10-14 20:55:39,423 PSP_VALIDATION       INFO    - nacitam schema: /opt/psp-validator/lib/schema/mets.xsd
+2012-10-14 20:55:44,710 PSP_VALIDATION       DEBUG   - volam schema.validate
+2012-10-14 20:55:44,723 PSP_VALIDATION       DEBUG   - vysledek schema.validate:True
+2012-10-14 20:55:44,724 PSP_VALIDATION       INFO    - validator: validace vnitrku METS souboru
+2012-10-14 20:55:44,727 PSP_VALIDATION       DEBUG   - nalezene mods elementy: [&lt;Element {http://www.loc.gov/mods/v3}mods at 0xb6c54d4c&gt;]
+2012-10-14 20:55:44,728 PSP_VALIDATION       INFO    - nacitam schema: /opt/psp-validator/lib/schema/mods-3-4.xsd
+2012-10-14 20:55:48,739 PSP_VALIDATION       DEBUG   - vysledky schema.validate:[{'msg': '', 'success': True}]
+2012-10-14 20:55:48,742 PSP_VALIDATION       INFO    - validator: validace vnitrku METS souboru, specifikace DC
+2012-10-14 20:55:48,751 PSP_VALIDATION       DEBUG   - nalezene DC elementy: [&lt;Element {http://www.openarchives.org/OAI/2.0/oai_dc/}dc at 0xb6c54dec&gt;]
+2012-10-14 20:55:48,751 PSP_VALIDATION       INFO    - nacitam schema: /opt/psp-validator/lib/schema/oai_dc.xsd
+2012-10-14 20:55:49,872 PSP_VALIDATION       DEBUG   - vysledky schema.validate:[{'msg': '', 'success': True}]
 </pre>
 
 
@@ -383,7 +411,7 @@ optional arguments:
 </li>
 </ul>
 <ul>
-<li id="sec-1-5-1-2"><code>012_mets_mods</code><br/>
+<li id="sec-1-5-1-2"><code>02_mets_mods</code><br/>
 
 
 
@@ -398,6 +426,24 @@ optional arguments:
 </pre>
 
 
+</li>
+</ul>
+<ul>
+<li id="sec-1-5-1-3"><code>03_mets_dc</code><br/>
+
+
+
+<pre class="src src-sh">/opt/psp-validator/bin/validate-psp.py -i 03_mets_dc
+</pre>
+
+
+<pre class="example">
+ validace vnitrku METS souboru, specifikace DC
+        @group: mets
+        validuje vnitrni polozky DC v METS soubor podle specifikace Dublin Core
+</pre>
+
+
 
 </li>
 </ul>
@@ -408,7 +454,7 @@ optional arguments:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-13 06:06:34 CEST</p>
+<p class="date">Date: 2012-10-14 20:55:55 CEST</p>
 <p class="author">Author: Jan Stavel</p>
 <p class="creator">Org version 7.8.11 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
