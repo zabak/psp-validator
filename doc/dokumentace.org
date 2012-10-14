@@ -125,7 +125,7 @@
     :         @group: mets
     :         validuje METS soubor podle specifikace METS
 
-**** ~012_mets_mods~
+**** ~02_mets_mods~
     #+BEGIN_SRC sh :results output verbatim  :exports both
      /opt/psp-validator/bin/validate-psp.py -i 02_mets_mods
     #+END_SRC     
@@ -134,5 +134,15 @@
     :  validace vnitrku METS souboru
     :         @group: mets
     :         validuje vnitrni polozky MODS v METS soubor podle specifikace MODS
+
+**** ~03_mets_dc~
+    #+BEGIN_SRC sh :results output verbatim  :exports both
+     /opt/psp-validator/bin/validate-psp.py -i 03_mets_dc
+    #+END_SRC     
+
+    #+RESULTS:
+    :  validace vnitrku METS souboru, specifikace DC
+    :         @group: mets
+    :         validuje vnitrni polozky DC v METS soubor podle specifikace Dublin Core
 
      

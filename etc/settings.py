@@ -34,18 +34,21 @@ workdir = get_workdir()
 
 fname = os.path.join(project_dir,"lib","schema","mets.xsd")
 
-def inSchemaDir(schema):
+def withSchemaDir(schema):
     return os.path.join(project_dir,"lib","schema",schema)
 
 schema_catalog = { 
-    'mets': { 'uri': "http://www.loc.gov/mods/v3",
-              'location': inSchemaDir("mets.xsd"),
+    'mets': { 'uri': "http://www.loc.gov/METS/",
+              'location': withSchemaDir("mets.xsd"),
               },
-    'dc':   { 'uri': "",
-              'location': inSchemaDir("oai_dc.xsd"),
+    'dc':   { 'uri': "http://www.openarchives.org/OAI/2.0/oai_dc/",
+              'location': withSchemaDir("oai_dc.xsd"),
               },
     'mods': { 'uri':"http://www.loc.gov/mods/v3",
-              'location': inSchemaDir("mods-3-4.xsd"),
-              }
+              'location': withSchemaDir("mods-3-4.xsd"),
+              },
+    'xlink': {'uri': "http://www.w3.org/1999/xlink",
+              'location': ""
+        }
     }
 

@@ -75,23 +75,50 @@ class Validator(object):
         @group: mets
         validuje vnitrni polozky MODS v METS soubor podle specifikace MODS"""
         mets = self.psp.mets
-        mods = mets.etree.xpath("//mods:mods",  
-                                namespaces = { 'mods': schema_catalog['mods']['uri'],
-                                               'mets': schema_catalog['mets']['uri'],
-                                               }
-                                )
-        if len(mods) == 0:
+        elems = mets.etree.xpath("//mods:mods",  
+                                 namespaces = { 'mods': schema_catalog['mods']['uri'],
+                                                'mets': schema_catalog['mets']['uri'],
+                                                }
+                                 )
+        if len(elems) == 0:
             logger.error("nenasel jsem zadnou mods polozku")
             return False
-
-        logger.debug('nalezene mods elementy: ' + str(mods))
+        
+        logger.debug('nalezene mods elementy: ' + str(elems))
         
         schema = self.catalog.mods
-        results = [ schema.validate(m) or schema.error_log for m in mods ]
+        results = [ schema.validate(m) and {'success':True, 'msg': ""} or {'success': False, 'msg': schema.error_log } for m in elems ]
         logger.debug("vysledky schema.validate:" + str(results))
-        some_error = 'Error' in [ r and 'Error' for r in results ]
+        some_error = False in [ r['success']  for r in results ]
         if some_error:
-            logger.error('chyby validace: ' + str([r for r in results if r]))
+            logger.error('chyby validace: ' + str([r['msg'] for r in results if r]))
+            return False
+        
+        return True
+
+    def validate_03_mets_dc(self):
+        """ validace vnitrku METS souboru, specifikace DC
+        @group: mets
+        validuje vnitrni polozky DC v METS soubor podle specifikace Dublin Core"""
+        mets = self.psp.mets
+        elems = mets.etree.xpath("//dc:dc",  
+                                 namespaces = { 'mods': schema_catalog['mods']['uri'],
+                                                'mets': schema_catalog['mets']['uri'],
+                                                'dc': schema_catalog['dc']['uri'],
+                                                }
+                                 )
+        if len(elems) == 0:
+            logger.error("nenasel jsem zadnou Dublin Core polozku")
+            return False
+
+        logger.debug('nalezene DC elementy: ' + str(elems))
+        
+        schema = self.catalog.dc
+        results = [ schema.validate(m) and {'success':True, 'msg': ""} or {'success': False, 'msg': schema.error_log } for m in elems ]
+        logger.debug("vysledky schema.validate:" + str(results))
+        some_error = False in [ r['success']  for r in results ]
+        if some_error:
+            logger.error('chyby validace: ' + str([r['msg'] for r in results if r]))
             return False
         
         return True
