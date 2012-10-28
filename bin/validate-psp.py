@@ -97,11 +97,13 @@ args = parser.parse_args()
 
 if args.info:
     print Validator.desc_of_validator(args.info)
+    workdir.rmdir()
     sys.exit(0)
     
 if args.list_validators:
     print "seznam validací:\n\t",
     print "\n\t".join(Validator.validators())
+    workdir.rmdir()
     sys.exit(0)
 
 if args.verbose:
