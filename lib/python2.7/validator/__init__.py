@@ -85,8 +85,8 @@ class Validator(object):
         pass
 
     def validate_01_mets(self):
-        """ validace METS souboru
-        validuje METS soubor podle specifikace METS"""
+        """ validace hlavního METS souboru
+        validuje hlavní METS soubor podle specifikace METS"""
         mets = self.psp.mets
         schema = self.catalog.mets
         logger.debug("volam schema.validate")
@@ -97,8 +97,8 @@ class Validator(object):
         return result
 
     def validate_01_mets_mods(self):
-        """ validace vnitřku METS souboru
-        validuje vnitřní položky MODS v METS soubor podle specifikace MODS"""
+        """ validace vnitřku hlavního METS souboru
+        validuje vnitřní položky MODS v hlavním METS soubor podle specifikace MODS"""
         mets = self.psp.mets
         elems = mets.etree.xpath("//mods:mods",  namespaces = self.catalog.namespaces)
         if len(elems) == 0:
@@ -137,8 +137,8 @@ class Validator(object):
         return True
 
     def validate_02_links_exist(self):
-        """ validace linek v souboru mets
-        zkontroluje, zda existují všechny soubory na které se odkazují linky v souboru METS."""
+        """ validace linek v hlavním METS souboru
+        zkontroluje, zda existují všechny soubory na které se odkazují linky v hlavním souboru METS."""
         
         hrefs = self.psp.mets.xpath("//mets:file/mets:FLocat/@xlink:href", namespaces=self.catalog.namespaces)
 
@@ -151,7 +151,7 @@ class Validator(object):
         return self.for_each(hrefs, validator)
 
     def validate_02_links_checksums(self):
-        """ kontrola CHECKSUM všech souborů na které se v METS souboru odkazuje
+        """ kontrola CHECKSUM všech souborů na které se v hlavním METS souboru odkazuje
         zkontroluje, zda mají soubory, na které linky odkazují, správnou CHECKSUM."""
 
         mets_files = self.psp.mets.xpath("//mets:file", namespaces=self.catalog.namespaces)
@@ -175,8 +175,8 @@ class Validator(object):
         return self.for_each(mets_files, validator)
    
     def validate_03_techspecs(self):
-        """ validace souboru amdSec s technickými metadaty
-        zkontroluje předběžně jednotlivé soubory ve složce amdSec"""
+        """ validace souborů ve složce amdSec
+        zkontroluje předběžně jednotlivé soubory ve složce =amdSec= podle formátu METS"""
 
         paths = self.psp.mets.xpath("//mets:fileGrp[@ID='TECHMDGRP']/mets:file/mets:FLocat/@xlink:href",
                                     namespaces = self.catalog.namespaces
@@ -206,9 +206,9 @@ class Validator(object):
         return self.for_each(fpaths, validator)
 
     def validate_03_techspecs_premis_mix(self):
-        """ validace souboru amdSec na technická metadata
+        """ validace souborů ve složce amdSec na technická metadata
         zkontroluje, zda jednotlivé soubory odpovídají použitým schematům.
-        To je formát METS a vevnitřs jsou polozky AMD - podle schematu PREMIS v2.1. a položky ve formatu MIX"""
+        To je formát METS a vevnitřs jsou polozky =premis:object= podle schematu PREMIS v2.1. a položky =mix:mix= ve formatu MIX"""
 
         paths = self.psp.mets.xpath("//mets:fileGrp[@ID='TECHMDGRP']/mets:file/mets:FLocat/@xlink:href", 
                                     namespaces = self.catalog.namespaces)
@@ -244,8 +244,8 @@ class Validator(object):
         #return self.for_each([fpaths[0]], validator)
 
     def validate_04_altos(self):
-        """ validace souboru ALTO_ se skenem
-        zkontroluje predbezne cely soubor ve slozce ALTO podle schematu ALTO"""
+        """ validace souborů v adresáři =ALTO=
+        zkontroluje předběžně každý soubor ve složce ALTO podle schematu ALTO"""
 
         paths = self.psp.mets.xpath("//mets:fileGrp[@ID='ALTOGRP']/mets:file/mets:FLocat/@xlink:href",
                                     namespaces = self.catalog.namespaces)
