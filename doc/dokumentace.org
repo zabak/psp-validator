@@ -12,7 +12,7 @@
    * budou chodit emaily
    * komunikace v cestine
    * repozitar na code.google.com
-   * software bude v anglicntine
+   * software bude v anglictine
    * prubezne verze standardu se nebudou publikovat
    * zapojeni krajske knihovny do testovani - posilali by testovaci data pro testovani
    * program by nemel skoncit na prvni chybe. protoze se schema vyvyji a neco uz nemusi byt chybou
@@ -50,6 +50,8 @@
 *** linux
     
 *** windows
+   
+** nastaveni lokalniho =catalog=
    
 ** volání programu
    :PROPERTIES:

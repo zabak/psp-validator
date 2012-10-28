@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <public publicId="info:lc/xmlns/premis-v2" uri="file:///opt/psp-validator/lib/schema/premis-v2-1.xsd"/>
+  <public publicId="http://www.loc.gov/METS/" uri="file:///opt/psp-validator/lib/schema/mets.xsd"/>
+  <public publicId="http://www.loc.gov/mods/v3" uri="file///opt/psp-validator/lib/schema/mods-3-4.xsd"/>
+  <public publicId="http://www.openarchives.org/OAI/2.0/oai_dc/" uri="file:///opt/psp-validator/lib/schema/oai_dc.xsd"/>
+  <public publicId="http://www.w3.org/1999/xlink" uri="file:///opt/psp-validator/lib/schema/xlink.xsd"/>
+  <public publicId="http://www.w3.org/2001/XMLSchema-instance" uri="file:///opt/psp-validator/lib/schema/XMLSchema.xsd"/>
+  <public publicId="http://purl.org/dc/elements/1.1/" uri="file:///ops/psp-validator/lib/schema/simpledc20021212.xsd"/>
+  <public publicId="http://www.loc.gov/standards/alto/ns-v2#"  uri="http://www.loc.gov/standards/alto/alto-v2.0.xsd"/>
+
+  <rewriteURI uriStartString="http://www.loc.gov/standards/premis/v2/" rewritePrefix="file///opt/psp-validator/lib/schema/"/>
+  <rewrireURI uriStartString="http://dublincore.org/schemas/xmls/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.openarchives.org/OAI/2.0/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.loc.gov/standards/mods/v3/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.loc.gov/standards/mets/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.w3.org/2001/" rewritePrefix="file://opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.loc.gov/standards/xlink/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.w3.org/2001/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.loc.gov/mods/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+  <rewriteURI uriStartString="http://www.loc.gov/standards/alto/" rewritePrefix="file:///opt/psp-validator/lib/schema/"/>
+
+  <!-- <uri name="http://www.loc.gov/standards/premis/v2/premis-v2-1.xsd" uri="file///opt/psp-validator/lib/schema/premis-v2-1.xsd"/> -->
+  <!-- <uri name="http://dublincore.org/schemas/xmls/simpledc20021212.xsd" uri="file:///opt/psp-validator/lib/schema/simpledc20021212.xsd"/> -->
+  <!-- <uri name="http://www.openarchives.org/OAI/2.0/oai_dc.xsd" uri="file:///opt/psp-validator/lib/schema/oai_dc.xsd"/> -->
+  <!-- <uri name="http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" uri="file:///opt/psp-validator/lib/schema/mods-3-4.xsd"/> -->
+  <!-- <uri name="http://www.loc.gov/standards/mets/mets.xsd" uri="file:///opt/psp-validator/lib/schema/mets.xsd"/> -->
+  <!-- <uri name="http://www.w3.org/2001/XMLSchema.xsd" uri="file://opt/psp-validator/lib/schema/XMLSchema.xsd"/> -->
+  <!-- <uri name="http://www.loc.gov/standards/xlink/xlink.xsd" uri="file:///opt/psp-validator/lib/schema/xlink.xsd"/> -->
+  <!-- <uri name="http://www.w3.org/2001/xml.xsd" uri="file:///opt/psp-validator/lib/schema/xml.xsd"/> -->
+  <!-- <uri name="http://www.loc.gov/mods/xml.xsd" uri="file:///opt/psp-validator/lib/schema/xml.xsd"/> -->
+  <!-- <uri name="http://www.loc.gov/standards/alto/alto-v2.0.xsd" uri="file:///opt/psp-validator/lib/schema/alto-v2.0.xsd"/> -->
+</catalog>
