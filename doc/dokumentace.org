@@ -97,7 +97,7 @@
 
 *** přehled dostupných validací
    #+BEGIN_SRC sh :results output verbatim :exports both
-   /opt/psp-validator/bin/validate-psp.py -m -v -l
+   /opt/psp-validator/bin/validate-psp.py -l
    #+END_SRC
 
    #+RESULTS:
