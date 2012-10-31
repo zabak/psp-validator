@@ -60,6 +60,8 @@ class Validator(object):
             if error:
                 logger.error("chyba validace: %s" % (error,))
                 all_valid = False
+                if self.kwargs.get('oneerror',False):
+                    return False
         return all_valid
         
     @property

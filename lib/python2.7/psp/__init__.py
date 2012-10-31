@@ -13,18 +13,23 @@ class PSP(object):
     """ umí rozbalit balíček do zadaného pracovního adresáře.
     Umí poskytovat přístup k jednotlivým částem balíčku"""
 
-    def __init__(self, fname):
-        self.fname = fname
-        self.archive = zipfile.ZipFile(self.fname,"r")
-        self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fname)[0])[0])
-        logger.debug("basename je: %s" % (self.basename,))
+    def __init__(self, fpath):
+        self.fpath = fpath
+        self.archive = None
+        if not os.path.isdir(fpath):
+            self.fpath = fpath
+            self.archive = zipfile.ZipFile(self.fpath,"r")
+            self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
+            logger.debug("basename je: %s" % (self.basename,))
+        else:
+            self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
         self.dirname = workdir.join(self.basename)
         logger.debug("data jsou v adresari: %s" % (self.dirname,))
         self._unzipped = False
         #self._unzipped = True
         
     def __str__(self):
-        return self.fname
+        return self.fpath
 
     def _unzip(self):
         self.archive.extractall(str(workdir))

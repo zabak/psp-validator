@@ -7,9 +7,9 @@ import logging, argparse, os, sys, tempfile
 sys.path.append(os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','python2.7'))
 sys.path.append(os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'etc'))
 if 'XML_catalog_files' in os.environ:
-        os.environ['XML_CATALOG_FILES'] = os.environ['XML_CATALOG_FILES'] + " " + os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','schema','catalog.xml')
+       os.environ['XML_CATALOG_FILES'] = os.environ['XML_CATALOG_FILES'] + " " + os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','schema','catalog.xml')
 else:
-        os.environ['XML_CATALOG_FILES'] = os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','schema','catalog.xml')
+       os.environ['XML_CATALOG_FILES'] = os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','schema','catalog.xml')
 
 from directories import WorkDir
 from psp import PSP
@@ -47,7 +47,7 @@ parser.add_argument('--version',
                     version = "%(prog)s verze 0.1")
 
 parser.add_argument('PSP',
-                    help="cesta k PSP balíčku",
+                    help="cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, nebude se mazat. Pokud to je soubor, rozbali se do tmp adresare a na konci se smaze.",
                     nargs='?'
                     )
 
@@ -91,6 +91,12 @@ parser.add_argument('--normdir',
                     default=False,
                     required=False)
 
+parser.add_argument('-o','--oneerror',
+                    help='Kdyz se validuji soubory v adresari, tak skonci pri prvni chybe. Aby tech chyb nebylo moc.',
+                    action='store_true',
+                    default=False,
+                    required=False)
+
 args = parser.parse_args()
 
 # file:///usr/share/doc/python-lxml-doc/html/xpathxslt.html
@@ -111,8 +117,9 @@ if args.verbose:
 if args.debug:
     set_logger_level(logging.DEBUG)
 
-validator = Validator(psp = PSP(fname=args.PSP), **vars(args))
-set_file_handler(validator.psp.basename)
+
+validator = Validator(psp = PSP(fpath=args.PSP), **vars(args))
+# set_file_handler(validator.psp.basename)
 logger.info("budu validovat soubor %s" % ( str(validator.psp), ))
 logger.info("pracuji v adresari: %s" % (str(workdir),))
 if args.partial:

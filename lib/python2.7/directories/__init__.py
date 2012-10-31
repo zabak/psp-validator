@@ -8,7 +8,8 @@ class WorkDir(object):
         self.tmpbase = tmpbase
         self.tmpdir = tempfile.mkdtemp(dir=tmpbase, prefix = datetime.datetime.now().strftime("PSP-Validation-%Y-%m-%d-"))
         #self.tmpdir = "/opt/psp-validator/tmp/PSP-Validation-2012-10-28-DWKjQC"
-        
+        #self.tmpdir = "/opt/psp-validator/tmp/PSP"
+
     def __str__(self):
         return self.tmpdir
     

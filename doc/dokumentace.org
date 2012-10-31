@@ -3,7 +3,14 @@
   :PROPERTIES:
   :ID:       20d91565-bc03-4147-8d00-b59825f48f37
   :END:
-** ve zkratce
+  Program validuje =PSP= balíček. =PSP= se používá k uchování digitálních informací o periodikách a monografiích. 
+  Tento balíček používá =Národní knihovna= k digitalizaci a uchování informací o periodikách a monografiích.
+
+  Podrobnosti o formátech použitých v =PSP= balíčku jsou na stránkách =Národní knihovny=.
+
+  Program je vystaven v repozitáři =Google Code= https://code.google.com/p/psp-validator/
+
+** ve zkratce k projektu
    :PROPERTIES:
    :ID:       1cb9f0aa-7ba2-4bce-bc0d-3dffe29e7a8a
    :END:
@@ -24,14 +31,20 @@
    * udelat instalator pro windows
    * vystup bude v textovem souboru
 
-** instalace vývojové verze programu
-   Vývojové větve se používají při testování.
-   
-   Používá se větev =develop=.
+** co program umí
+   - [X] validuje hlavní soubor =METS= podle schematu =METS=
+   - [X] validuje položky =dc= v hlavním souboru =METS= podle schematu =Dublin Core=
+   - [X] validuje soubory v adresáři =amdSec= podle schematu =METS=
+   - [X] validuje jednotlivé části =premis:object= a =mix:mix= v souborech v adresáři =amdsec=
+   - [X] zkontroluje, že všechny linky, které jsou v souboru =METS=, existují
+   - [X] zkontroluje =MD5= součet všech souborů, na které se soubor =METS= odkazuje
+   - [X] validuje soubory v adresáři =ALTO= podle schematu =ALTO=
 
-*** linux
-**** instalace python 2.7
-     
+   Program vypisuje informace o průběhu validací na konzoli a současně do souboru =log/messages.log=.
+
+   Validovaný balíček rozbaluje do adresáře =tmp=.
+
+** instalace programu
 *** windows
 **** instalace python 2.7
 ***** stáhnout aktuální verzi pythonu http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi
@@ -40,22 +53,26 @@
       aby se dal volat python v =cmd=.
       
 **** instalace lxml
-     http://lxml.de/build.html#static-linking-on-windows
+***** instalace binárek
+      http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml
+      
+      vybere se lxml-X.X.X.win*.exe
+      Ten se nainstaluje. Pokud 
+
+**** instalace programu
+     - uloží se =zip= balíček ze sekce [[https://code.google.com/p/psp-validator/downloads/list][downloads]]
+     - rozbalí se do adresáře =C:\Opt=
      
-     musí se stáhnout zdrojové texty balíčku =lxml=.
-     
-     Poté se musí stáhnout aktuální zdrojové texty pridružených knihoven z ftp://ftp.zlatkovic.com/pub/libxml/.
-     
-** instalace vydané verze programu
-*** linux
-    
-*** windows
-   
-** nastaveni lokalniho =catalog=
+     Takže program bude v adresáři: =C:\Opt\psp-validator=
+
+     - do proměnné =PATH= se doplní cesta k programu: =C:\Opt\psp-validator\bin\validate-psp.py=
+
 ** volání programu
    :PROPERTIES:
    :ID:       4b49694e-cd6c-4454-b479-c8684a2b4160
    :END:
+   Pokud jsme ve *Windows*, tak se k cestě k programu přidá název disku: =C:\Opt\psp-validator\bin\validate-psp.py --help=
+
    #+BEGIN_SRC sh :results output verbatim :exports both
     /opt/psp-validator/bin/validate-psp.py --help
    #+END_SRC
@@ -63,7 +80,7 @@
    #+RESULTS:
    #+begin_example
    usage: validate-psp.py [-h] [-m] [-v] [--version] [-l] [-d] [-i INFO]
-			  [-p PARTIAL] [-s] [--normdir]
+			  [-p PARTIAL] [-s] [--normdir] [-o]
 			  [PSP]
 
    Program validuje PSP balíček.
@@ -75,10 +92,10 @@
 
      Každá z těchto voleb se dá vypnout.
 
-   Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-28-lyM1GM
+   Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-31-OzGshD
 
    positional arguments:
-     PSP                   cesta k PSP balíčku
+     PSP                   cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, nebude se mazat. Pokud to je soubor, rozbali se do tmp adresare a na konci se smaze.
 
    optional arguments:
      -h, --help            show this help message and exit
@@ -93,6 +110,7 @@
 			   zavola jen jeden kontretni krok validace. Seznam validaci vypisuje argument -l
      -s, --summary         na konci vypíše přehled testů, co provedl a s jakým skončily výsledkem.
      --normdir             na konci se maže pracovní adresář. S tímto argumentem se adresář nesmaže.
+     -o, --oneerror        Kdyz se validuji soubory v adresari, tak skonci pri prvni chybe. Aby tech chyb nebylo moc.
 #+end_example
 
 *** přehled dostupných validací
@@ -343,7 +361,7 @@
     #+END_SRC     
 
     #+RESULTS:
-    :  kontrola CHECKSUM všech souborů na které se v METS souboru odkazuje
+    :  kontrola CHECKSUM všech souborů na které se v hlavním METS souboru odkazuje
     :         zkontroluje, zda mají soubory, na které linky odkazují, správnou CHECKSUM.
 
 **** ~02_links_exist~
@@ -352,8 +370,8 @@
     #+END_SRC     
 
     #+RESULTS:
-    :  validace linek v souboru mets
-    :         zkontroluje, zda existují všechny soubory na které se odkazují linky v souboru METS.
+    :  validace linek v hlavním METS souboru
+    :         zkontroluje, zda existují všechny soubory na které se odkazují linky v hlavním souboru METS.
 
     
 
@@ -365,8 +383,8 @@
     #+END_SRC     
 
     #+RESULTS:
-    :  validace souboru amdSec s technickými metadaty
-    :         zkontroluje předběžně jednotlivé soubory ve složce amdSec
+    :  validace souborů ve složce amdSec
+    :         zkontroluje předběžně jednotlivé soubory ve složce =amdSec= podle formátu METS
 
 **** ~03_techspecs_premis_mix~
     #+BEGIN_SRC sh :results output verbatim :exports both
@@ -374,9 +392,9 @@
     #+END_SRC     
 
     #+RESULTS:
-    :  validace souboru amdSec na technická metadata
+    :  validace souborů ve složce amdSec na technická metadata
     :         zkontroluje, zda jednotlivé soubory odpovídají použitým schematům.
-    :         To je formát METS a vevnitřs jsou polozky AMD - podle schematu PREMIS v2.1. a položky ve formatu MIX
+    :         To je formát METS a vevnitřs jsou polozky =premis:object= podle schematu PREMIS v2.1. a položky =mix:mix= ve formatu MIX
 
 
 *** kontrola souborů v adresáři =ALTO=
@@ -386,6 +404,38 @@
     #+END_SRC     
 
     #+RESULTS:
-    :  validace souboru ALTO_ se skenem
-    :         zkontroluje predbezne cely soubor ve slozce ALTO podle schematu ALTO
+    :  validace souborů v adresáři =ALTO=
+    :         zkontroluje předběžně každý soubor ve složce ALTO podle schematu ALTO
 
+** rady
+*** když chci vidět seznam validací, co program umí
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -l
+    #+END_EXAMPLE     
+
+*** když chci vidět informace o jedné validaci
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -i 04_altos
+    #+END_EXAMPLE    
+*** když chci vidět pouze výsledky na konci
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+    #+END_EXAMPLE     
+
+*** když chci provést jen určitou validaci
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -p 03_techspecs /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+    #+END_EXAMPLE
+
+*** když chci zachovat rozbalený balíček
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -s -p 03_techspecs --normdir /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+    #+END_EXAMPLE
+
+*** když program vypisuje hodně chyb
+    - pustím program se souhrnným výpisem na konci
+    - zjistím, které validace neprošly
+    - pustím program s dotyčnou validací a aby skončil při první chybě a zachoval rozbalený balíček
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -v -s -p 03_techspecs --normdir --oneerror /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+    #+END_EXAMPLE
