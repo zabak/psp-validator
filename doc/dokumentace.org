@@ -69,7 +69,7 @@
      
      Takže program bude v adresáři: =C:\Opt\psp-validator=
 
-     - do proměnné =PATH= se doplní cesta k programu: =C:\Opt\psp-validator\bin\validate-psp.py=
+     - do proměnné =PATH= se doplní cesta k programu: =C:\Opt\psp-validator\bin=
 
 ** volání programu
    :PROPERTIES:
