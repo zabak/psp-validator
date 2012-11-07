@@ -6,35 +6,28 @@ import logging.handlers
 from directories import WorkDir
 project_dir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
 
-_logger = None
 _workdir = None
 
-def set_logger_level(level):
-    _logger.setLevel(level)
-
-def get_logger():
-    global _logger
-    if not _logger:
-        _logger = logging.getLogger("PSP_VALIDATION")
+def get_logger(name=None):
+    logger = logging.getLogger(name and "psp_validation."+name or "psp_validation")
         # %d (%F{1}:%L)         %-15c   - %p - %m %n
-        formatter = logging.Formatter('%(asctime)s %(name)s\t%(levelname)s \t- %(message)s')
-        _logger.setLevel(logging.ERROR)
-        ch = logging.StreamHandler()
-        ch.setFormatter(formatter)
-        _logger.addHandler(ch)
+    formatter = logging.Formatter('%(levelname)s \t- %(message)s')
+    ch = logging.StreamHandler()
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
 
-        tfh = logging.handlers.TimedRotatingFileHandler(os.path.join(project_dir,"log","messages.log"), when='midnight', backupCount=7)
-        tfh.setFormatter(formatter)
-        _logger.addHandler(tfh)
+    tfh = logging.handlers.TimedRotatingFileHandler(os.path.join(project_dir,"log","messages.log"), when='midnight', backupCount=7)
+    tfh.setFormatter(formatter)
+    logger.addHandler(tfh)
+    return logger
+
+def get_file_log_handler(fpath):
+    """ logger for psp validator. It appends logs into local file """
+    formatter = logging.Formatter('%(levelname)s \t- %(message)s')
+    fh = logging.FileHandler(fpath, mode='w')
+    fh.setFormatter(formatter)
+    return fh
         
-    return _logger
-
-def set_file_handler(psp_name):
-    logger = get_logger()
-    formatter = logging.Formatter('%(asctime)s %(name)s\t%(levelname)s \t- %(message)s')
-    ff = logging.FileHandler(workdir.join(psp_name + ".log"))
-    ff.setFormatter(formatter)
-    logger.addHandler(ff)
     
 
 def get_workdir():
@@ -43,7 +36,6 @@ def get_workdir():
         _workdir = WorkDir(tmpbase = os.path.join(project_dir,'tmp'))
     return _workdir
 
-logger = get_logger()
 workdir = get_workdir()
 
 fname = os.path.join(project_dir,"lib","schema","mets.xsd")

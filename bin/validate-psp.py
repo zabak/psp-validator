@@ -1,7 +1,8 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-import logging, argparse, os, sys, tempfile
+import argparse, os, sys, tempfile
+import glob
 
 # pridame lokalni knihovny
 sys.path.append(os.path.join(os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],'lib','python2.7'))
@@ -14,10 +15,11 @@ else:
 from directories import WorkDir
 from psp import PSP
 from validator import Validator
-from settings import logger, workdir, set_logger_level, set_file_handler
+from settings import workdir, get_logger, get_file_log_handler
+import logging
 
 # http://www.cafeconleche.org/books/effectivexml/chapters/47.html
-
+logger = get_logger()
 parser = argparse.ArgumentParser(description="""Program validuje PSP balíček.
 
 Umí validovat na třech úrovních:
@@ -28,6 +30,9 @@ Umí validovat na třech úrovních:
   Každá z těchto voleb se dá vypnout.
 
 Program rozbalí zadaný PSP balíček do adresáře %s
+
+Pokud je zadaný adresář, tak vezme všechny soubory, co mají příponu =.zip=
+a pokusí se je zkontrolovat.
 """ % (str(workdir), ),
                                  formatter_class = argparse.RawTextHelpFormatter
                                  )
@@ -47,7 +52,7 @@ parser.add_argument('--version',
                     version = "%(prog)s verze 0.1")
 
 parser.add_argument('PSP',
-                    help="cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, nebude se mazat. Pokud to je soubor, rozbali se do tmp adresare a na konci se smaze.",
+                    help="cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, vezme všechny soubory a zvaliduje je.",
                     nargs='?'
                     )
 
@@ -112,30 +117,47 @@ if args.list_validators:
     workdir.rmdir()
     sys.exit(0)
 
+
+root_logger = logging.getLogger()
+
 if args.verbose:
-    set_logger_level(logging.INFO)
+    root_logger.setLevel(logging.INFO)
 if args.debug:
-    set_logger_level(logging.DEBUG)
+    root_logger.setLevel(logging.DEBUG)
 
+logger.debug("pracovni adresar je: " + str(workdir))
+psps = (os.path.isdir(args.PSP) and  glob.glob(os.path.join(args.PSP,'*.zip'))) \
+    or (os.path.isfile(args.PSP) and [args.PSP])
 
-validator = Validator(psp = PSP(fpath=args.PSP), **vars(args))
-# set_file_handler(validator.psp.basename)
-logger.info("budu validovat soubor %s" % ( str(validator.psp), ))
-logger.info("pracuji v adresari: %s" % (str(workdir),))
-if args.partial:
-    logger.info("budu volat jen jeden krok validace: %s" % (args.partial,))
-
-validator.validate(method = args.partial)
-if args.summary:
-    def prepare_setFixedWidth(max_width):
-        def formatter(s):
-            format_string = "{:<" + str(max_width) + "}"
-            return format_string.format(s)
-        return formatter
-
-    set_logger_level(logging.INFO)
-    formatter = prepare_setFixedWidth(max([len(ii['validator']) for ii in validator.summary]))
-    logger.info("vysledky validace:\n\t" + "\n\t".join([ "%s: %s" %( formatter(ii['validator']), ii['result'] and 'OK' or 'Error') for ii in validator.summary]))
+for psp in psps:
+       basename = os.path.basename(os.path.splitext(os.path.splitext(psp)[0])[0])
+       file_log_handler = get_file_log_handler(fpath=os.path.join(os.path.dirname(psp),basename+".log"))
+       logger.addHandler(file_log_handler)
+       try: 
+              validator = Validator(psp = PSP(fpath=psp), logger=logger, **vars(args))
+              condition = lambda name: True
+              if args.partial:
+                     condition = lambda name: name==args.partial
+                     pass
+              if args.mets:
+                     condition = lambda name: '_mets' in name
+                     pass
+              validator.validate(condition)
+              if args.summary:
+                     def prepare_setFixedWidth(max_width):
+                            def formatter(s):
+                                   format_string = "{:<" + str(max_width) + "}"
+                                   return format_string.format(s)
+                            return formatter
+                                   
+              logger.setLevel(logging.INFO)
+              formatter = prepare_setFixedWidth(max([len(ii['validator']) for ii in validator.summary]))
+              logger.info("vysledky validace:\n\t" + "\n\t".join([ "%s: %s" %( formatter(ii['validator']), ii['result'] and 'OK' or 'Error') for ii in validator.summary]))
+       except:
+              logger.error(str(sys.exc_info()[:2]))
+              sys.exc_clear()
+       logger.removeHandler(file_log_handler)
+       file_log_handler.close()
 
 if not args.normdir:
     workdir.rmdir()

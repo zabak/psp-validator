@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from settings import schema_catalog, logger
+from settings import schema_catalog
 from lxml import etree
 
 class Catalog(object):
@@ -16,7 +16,6 @@ class Catalog(object):
     def mets(self):
         if not self._mets:
             schema = schema_catalog['mets']
-            logger.debug("nacitam schema: " + schema['location'])
             self._mets = etree.XMLSchema(file=schema['location'])
         return self._mets
 
@@ -24,7 +23,6 @@ class Catalog(object):
     def dc(self):
         if not self._dc:
             schema = schema_catalog['dc']
-            logger.debug("nacitam schema: " + schema['location'])
             self._dc = etree.XMLSchema(file=schema['location'])
         return self._dc
 
@@ -32,7 +30,6 @@ class Catalog(object):
     def mods(self):
         if not self._mods:
             schema = schema_catalog['mods']
-            logger.debug("nacitam schema: " + schema['location'])
             self._mods = etree.XMLSchema(file=schema['location'])
         return self._mods
     
@@ -40,7 +37,6 @@ class Catalog(object):
     def premis(self):
         if not self._premis:
             schema = schema_catalog['premis']
-            logger.debug("nacitam schema: " + schema['location'])
             self._premis = etree.XMLSchema(file=schema['location'])
         return self._premis
 
@@ -48,7 +44,6 @@ class Catalog(object):
     def mix(self):
         if not self._mix:
             schema = schema_catalog['mix']
-            logger.debug("nacitam schema: " + schema['location'])
             self._mix = etree.XMLSchema(file=schema['location'])
         return self._mix
 
@@ -56,7 +51,6 @@ class Catalog(object):
     def alto(self):
         if not self._alto:
             schema = schema_catalog['alto']
-            logger.debug("nacitam schema: " + schema['location'])
             self._alto = etree.XMLSchema(file=schema['location'])
         return self._alto
     

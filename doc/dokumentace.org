@@ -3,7 +3,9 @@
   :PROPERTIES:
   :ID:       20d91565-bc03-4147-8d00-b59825f48f37
   :END:
-  Program validuje =PSP= balíček. =PSP= se používá k uchování digitálních informací o periodikách a monografiích. 
+  Program validuje =PSP= balíček, nebo celý adresář =PSP= balíčků.
+
+  =PSP= se používá k uchování digitálních informací o periodikách a monografiích. 
   Tento balíček používá =Národní knihovna= k digitalizaci a uchování informací o periodikách a monografiích.
 
   Podrobnosti o formátech použitých v =PSP= balíčku jsou na stránkách =Národní knihovny=.
@@ -43,6 +45,8 @@
    Program vypisuje informace o průběhu validací na konzoli a současně do souboru =log/messages.log=.
 
    Validovaný balíček rozbaluje do adresáře =tmp=.
+
+   Pokud se programu místo souboru zadá adresář, předpokládá, že v něm jsou =PSP= souboru. Ty všechny zvaliduje.
 
 ** instalace programu
 *** windows
@@ -92,10 +96,13 @@
 
      Každá z těchto voleb se dá vypnout.
 
-   Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-31-OzGshD
+   Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-11-07-B_vWM7
+
+   Pokud je zadaný adresář, tak vezme všechny soubory, co mají příponu =.zip=
+   a pokusí se je zkontrolovat.
 
    positional arguments:
-     PSP                   cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, nebude se mazat. Pokud to je soubor, rozbali se do tmp adresare a na konci se smaze.
+     PSP                   cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, vezme všechny soubory a zvaliduje je.
 
    optional arguments:
      -h, --help            show this help message and exit
@@ -129,7 +136,6 @@
    : 	03_techspecs_premis_mix
    : 	04_altos
 
-    
 *** příklad validace METS souboru
     [[id:4b49694e-cd6c-4454-b479-c8684a2b4160][volání programu]]
 
@@ -350,7 +356,7 @@
     #+END_SRC     
 
     #+RESULTS:
-    :  validace vnitřku hlavního METS souboru
+    :  validace vnitřku hlavního METS souboru, specifikace MODS
     :         validuje vnitřní položky MODS v hlavním METS soubor podle specifikace MODS
 
 *** kontrola linek v METS souboru
@@ -375,7 +381,6 @@
 
     
 
-
 *** kontrola souborů v adresáři =amdSec=
 **** ~03_techspecs~
     #+BEGIN_SRC sh :results output verbatim :exports both
@@ -396,7 +401,6 @@
     :         zkontroluje, zda jednotlivé soubory odpovídají použitým schematům.
     :         To je formát METS a vevnitřs jsou polozky =premis:object= podle schematu PREMIS v2.1. a položky =mix:mix= ve formatu MIX
 
-
 *** kontrola souborů v adresáři =ALTO=
 **** ~04_altos~
     #+BEGIN_SRC sh :results output verbatim :exports both
@@ -408,29 +412,63 @@
     :         zkontroluje předběžně každý soubor ve složce ALTO podle schematu ALTO
 
 ** rady
+*** nejpoužívanější parametry programu
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -s -o DIR
+    #+END_EXAMPLE     
+    
+    Program na konci vypíše jen přehled provedených validací. 
+    
+    Při validaci jednotlivých souborů skončí při první chybě.
+    
+*** když chci validovat jen hlavní =METS= soubor
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -m -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+    #+END_EXAMPLE     
+
+    Program provede jen validace spojené s hlavním =METS= souborem.
+    
 *** když chci vidět seznam validací, co program umí
     #+BEGIN_EXAMPLE
      /opt/psp-validator/bin/validate-psp.py -l
     #+END_EXAMPLE     
 
+    Program vypíše seznam dostupných validací.
+    
 *** když chci vidět informace o jedné validaci
     #+BEGIN_EXAMPLE
      /opt/psp-validator/bin/validate-psp.py -i 04_altos
     #+END_EXAMPLE    
+
+    Program vypíše podrobné informace o vybrané validaci.
+
 *** když chci vidět pouze výsledky na konci
     #+BEGIN_EXAMPLE
      /opt/psp-validator/bin/validate-psp.py -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
     #+END_EXAMPLE     
+
+    Program na konci vypíše přehled provedených validací a jejich výsledek.
+
+*** když chci vidět výsledky i průběh validace
+    #+BEGIN_EXAMPLE
+     /opt/psp-validator/bin/validate-psp.py -v -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+    #+END_EXAMPLE     
+
+    Program bude průběžně informovat o tom, co provádí a na konci vypíše přehled provedených validací a jejich výsledek.
 
 *** když chci provést jen určitou validaci
     #+BEGIN_EXAMPLE
      /opt/psp-validator/bin/validate-psp.py -p 03_techspecs /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
     #+END_EXAMPLE
 
+    Program provede jen vybranou validaci a skončí.
+
 *** když chci zachovat rozbalený balíček
     #+BEGIN_EXAMPLE
      /opt/psp-validator/bin/validate-psp.py -s -p 03_techspecs --normdir /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
     #+END_EXAMPLE
+
+    Program na konci ponechá rozbalený balíček.
 
 *** když program vypisuje hodně chyb
     - pustím program se souhrnným výpisem na konci

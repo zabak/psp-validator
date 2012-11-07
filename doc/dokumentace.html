@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <meta name="title" content="PSP-validátor"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-31 08:55:34 CET"/>
+<meta name="generated" content="2012-11-07 21:02:46 CET"/>
 <meta name="author" content="Jan Stavel"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -123,12 +123,15 @@
 </li>
 <li><a href="#sec-1-6">1.6 rady</a>
 <ul>
-<li><a href="#sec-1-6-1">1.6.1 když chci vidět seznam validací, co program umí</a></li>
-<li><a href="#sec-1-6-2">1.6.2 když chci vidět informace o jedné validaci</a></li>
-<li><a href="#sec-1-6-3">1.6.3 když chci vidět pouze výsledky na konci</a></li>
-<li><a href="#sec-1-6-4">1.6.4 když chci provést jen určitou validaci</a></li>
-<li><a href="#sec-1-6-5">1.6.5 když chci zachovat rozbalený balíček</a></li>
-<li><a href="#sec-1-6-6">1.6.6 když program vypisuje hodně chyb</a></li>
+<li><a href="#sec-1-6-1">1.6.1 nejpoužívanější parametry programu</a></li>
+<li><a href="#sec-1-6-2">1.6.2 když chci validovat jen hlavní <code>METS</code> soubor</a></li>
+<li><a href="#sec-1-6-3">1.6.3 když chci vidět seznam validací, co program umí</a></li>
+<li><a href="#sec-1-6-4">1.6.4 když chci vidět informace o jedné validaci</a></li>
+<li><a href="#sec-1-6-5">1.6.5 když chci vidět pouze výsledky na konci</a></li>
+<li><a href="#sec-1-6-6">1.6.6 když chci vidět výsledky i průběh validace</a></li>
+<li><a href="#sec-1-6-7">1.6.7 když chci provést jen určitou validaci</a></li>
+<li><a href="#sec-1-6-8">1.6.8 když chci zachovat rozbalený balíček</a></li>
+<li><a href="#sec-1-6-9">1.6.9 když program vypisuje hodně chyb</a></li>
 </ul>
 </li>
 </ul>
@@ -141,7 +144,10 @@
 <h2 id="sec-1"><a name="ID-20d91565-bc03-4147-8d00-b59825f48f37" id="ID-20d91565-bc03-4147-8d00-b59825f48f37"></a><span class="section-number-2">1</span> dokumentace</h2>
 <div class="outline-text-2" id="text-1">
 
-<p>  Program validuje <code>PSP</code> balíček. <code>PSP</code> se používá k uchování digitálních informací o periodikách a monografiích. 
+<p>  Program validuje <code>PSP</code> balíček, nebo celý adresář <code>PSP</code> balíčků.
+</p>
+<p>
+  <code>PSP</code> se používá k uchování digitálních informací o periodikách a monografiích. 
   Tento balíček používá <code>Národní knihovna</code> k digitalizaci a uchování informací o periodikách a monografiích.
 </p>
 <p>
@@ -227,6 +233,9 @@
 </p>
 <p>
    Validovaný balíček rozbaluje do adresáře <code>tmp</code>.
+</p>
+<p>
+   Pokud se programu místo souboru zadá adresář, předpokládá, že v něm jsou <code>PSP</code> souboru. Ty všechny zvaliduje.
 </p>
 </div>
 
@@ -327,10 +336,13 @@ Umí validovat na třech úrovních:
 
   Každá z těchto voleb se dá vypnout.
 
-Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-10-31-OzGshD
+Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-11-07-B_vWM7
+
+Pokud je zadaný adresář, tak vezme všechny soubory, co mají příponu =.zip=
+a pokusí se je zkontrolovat.
 
 positional arguments:
-  PSP                   cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, nebude se mazat. Pokud to je soubor, rozbali se do tmp adresare a na konci se smaze.
+  PSP                   cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar, vezme všechny soubory a zvaliduje je.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -374,7 +386,6 @@ seznam validací:
    03_techspecs_premis_mix
    04_altos
 </pre>
-
 
 
 </div>
@@ -643,7 +654,7 @@ seznam validací:
 
 
 <pre class="example">
- validace vnitřku hlavního METS souboru
+ validace vnitřku hlavního METS souboru, specifikace MODS
         validuje vnitřní položky MODS v hlavním METS soubor podle specifikace MODS
 </pre>
 
@@ -693,7 +704,6 @@ seznam validací:
 
 
 
-
 </li>
 </ul>
 </div>
@@ -737,7 +747,6 @@ seznam validací:
 </pre>
 
 
-
 </li>
 </ul>
 </div>
@@ -778,8 +787,47 @@ seznam validací:
 </div>
 
 <div id="outline-container-1-6-1" class="outline-4">
-<h4 id="sec-1-6-1"><span class="section-number-4">1.6.1</span> když chci vidět seznam validací, co program umí</h4>
+<h4 id="sec-1-6-1"><span class="section-number-4">1.6.1</span> nejpoužívanější parametry programu</h4>
 <div class="outline-text-4" id="text-1-6-1">
+
+
+
+
+<pre class="example">/opt/psp-validator/bin/validate-psp.py -s -o DIR
+</pre>
+
+
+<p>    
+    Program na konci vypíše jen přehled provedených validací. 
+</p>
+<p>    
+    Při validaci jednotlivých souborů skončí při první chybě.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-6-2" class="outline-4">
+<h4 id="sec-1-6-2"><span class="section-number-4">1.6.2</span> když chci validovat jen hlavní <code>METS</code> soubor</h4>
+<div class="outline-text-4" id="text-1-6-2">
+
+
+
+
+<pre class="example">/opt/psp-validator/bin/validate-psp.py -m -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+</pre>
+
+
+<p>
+    Program provede jen validace spojené s hlavním <code>METS</code> souborem.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-6-3" class="outline-4">
+<h4 id="sec-1-6-3"><span class="section-number-4">1.6.3</span> když chci vidět seznam validací, co program umí</h4>
+<div class="outline-text-4" id="text-1-6-3">
 
 
 
@@ -788,13 +836,16 @@ seznam validací:
 </pre>
 
 
+<p>
+    Program vypíše seznam dostupných validací.
+</p>
 </div>
 
 </div>
 
-<div id="outline-container-1-6-2" class="outline-4">
-<h4 id="sec-1-6-2"><span class="section-number-4">1.6.2</span> když chci vidět informace o jedné validaci</h4>
-<div class="outline-text-4" id="text-1-6-2">
+<div id="outline-container-1-6-4" class="outline-4">
+<h4 id="sec-1-6-4"><span class="section-number-4">1.6.4</span> když chci vidět informace o jedné validaci</h4>
+<div class="outline-text-4" id="text-1-6-4">
 
 
 
@@ -802,13 +853,17 @@ seznam validací:
 <pre class="example">/opt/psp-validator/bin/validate-psp.py -i 04_altos
 </pre>
 
+
+<p>
+    Program vypíše podrobné informace o vybrané validaci.
+</p>
 </div>
 
 </div>
 
-<div id="outline-container-1-6-3" class="outline-4">
-<h4 id="sec-1-6-3"><span class="section-number-4">1.6.3</span> když chci vidět pouze výsledky na konci</h4>
-<div class="outline-text-4" id="text-1-6-3">
+<div id="outline-container-1-6-5" class="outline-4">
+<h4 id="sec-1-6-5"><span class="section-number-4">1.6.5</span> když chci vidět pouze výsledky na konci</h4>
+<div class="outline-text-4" id="text-1-6-5">
 
 
 
@@ -817,13 +872,34 @@ seznam validací:
 </pre>
 
 
+<p>
+    Program na konci vypíše přehled provedených validací a jejich výsledek.
+</p>
 </div>
 
 </div>
 
-<div id="outline-container-1-6-4" class="outline-4">
-<h4 id="sec-1-6-4"><span class="section-number-4">1.6.4</span> když chci provést jen určitou validaci</h4>
-<div class="outline-text-4" id="text-1-6-4">
+<div id="outline-container-1-6-6" class="outline-4">
+<h4 id="sec-1-6-6"><span class="section-number-4">1.6.6</span> když chci vidět výsledky i průběh validace</h4>
+<div class="outline-text-4" id="text-1-6-6">
+
+
+
+
+<pre class="example">/opt/psp-validator/bin/validate-psp.py -v -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+</pre>
+
+
+<p>
+    Program bude průběžně informovat o tom, co provádí a na konci vypíše přehled provedených validací a jejich výsledek.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-6-7" class="outline-4">
+<h4 id="sec-1-6-7"><span class="section-number-4">1.6.7</span> když chci provést jen určitou validaci</h4>
+<div class="outline-text-4" id="text-1-6-7">
 
 
 
@@ -832,13 +908,16 @@ seznam validací:
 </pre>
 
 
+<p>
+    Program provede jen vybranou validaci a skončí.
+</p>
 </div>
 
 </div>
 
-<div id="outline-container-1-6-5" class="outline-4">
-<h4 id="sec-1-6-5"><span class="section-number-4">1.6.5</span> když chci zachovat rozbalený balíček</h4>
-<div class="outline-text-4" id="text-1-6-5">
+<div id="outline-container-1-6-8" class="outline-4">
+<h4 id="sec-1-6-8"><span class="section-number-4">1.6.8</span> když chci zachovat rozbalený balíček</h4>
+<div class="outline-text-4" id="text-1-6-8">
 
 
 
@@ -847,13 +926,16 @@ seznam validací:
 </pre>
 
 
+<p>
+    Program na konci ponechá rozbalený balíček.
+</p>
 </div>
 
 </div>
 
-<div id="outline-container-1-6-6" class="outline-4">
-<h4 id="sec-1-6-6"><span class="section-number-4">1.6.6</span> když program vypisuje hodně chyb</h4>
-<div class="outline-text-4" id="text-1-6-6">
+<div id="outline-container-1-6-9" class="outline-4">
+<h4 id="sec-1-6-9"><span class="section-number-4">1.6.9</span> když program vypisuje hodně chyb</h4>
+<div class="outline-text-4" id="text-1-6-9">
 
 <ul>
 <li>pustím program se souhrnným výpisem na konci
@@ -877,7 +959,7 @@ seznam validací:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-31 08:55:34 CET</p>
+<p class="date">Date: 2012-11-07 21:02:46 CET</p>
 <p class="author">Author: Jan Stavel</p>
 <p class="creator">Org version 7.8.11 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

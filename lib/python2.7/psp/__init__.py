@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-from settings import logger, workdir
+from settings import workdir
 import zipfile, os, os.path
 from .mets import Mets
 from .amdspec import AmdSpec
@@ -20,11 +20,9 @@ class PSP(object):
             self.fpath = fpath
             self.archive = zipfile.ZipFile(self.fpath,"r")
             self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
-            logger.debug("basename je: %s" % (self.basename,))
         else:
             self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
         self.dirname = workdir.join(self.basename)
-        logger.debug("data jsou v adresari: %s" % (self.dirname,))
         self._unzipped = False
         #self._unzipped = True
         

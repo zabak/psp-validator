@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from settings import logger, schema_catalog, workdir
+from settings import schema_catalog, workdir
 import re, os.path
 from .catalog import Catalog
 from lxml import etree
@@ -12,11 +12,13 @@ def get_short_description(doc):
 
  
 class Validator(object):
-    def __init__(self, psp, **kwargs):
+    def __init__(self, psp, logger, **kwargs):
         self.psp = psp
         self.kwargs = kwargs
         self.catalog = Catalog()
         self.results = []
+        self.logger = logger
+        self.logger.info("budu validovat soubor: " + psp.fpath)
 
     @classmethod
     def short_desc_of_validator(self,name):
@@ -35,30 +37,35 @@ class Validator(object):
         return None
 
     @classmethod
-    def validators(self):
+    def validators(self, condition = lambda name: True):
         method_names = [ m for m in dir(self) if 'validate_' in m ]
         method_names.sort()
-        return [ m.split("validate_")[1] for m in method_names ]
+        names = [ m.split("validate_")[1] for m in method_names ]
+        return [n for n in names if condition(n)]
 
-    def run_validator(self, name):
-        methods = [ 'validate_' . v for v in self.validators() if v == name ]
-        if methods:
-            m = methods[0]
-            logger.info("validator: %s" % (get_short_description(m.__doc__)))
-            m()
-        pass
+    # def run_validators(self, condition = (lambda name: True) ):
+    #     methods
+    #     methods = [ 'validate_' . v for v in self.validators() if condition(v) ]
+    #     if methods:
+    #         m = methods[0]
+    #         logger.info("validator: %s" % (get_short_description(m.__doc__)))
+    #         m()
+    #     pass
+
+    # def run_validator(self, name):
+    #     self.run_validators(condition = (lambda x: (x==name)) )
 
     def for_each(self, items, validator):
         if len(items) == 0:
-            logger.error("neni zadny element")
+            self.logger.error("neni zadny element")
             return False
         
         all_valid = True
         for item in items:
-            logger.debug('%s: %s' % (validator.__doc__,str(item),))
+            self.logger.debug('%s: %s' % (validator.__doc__,str(item),))
             error = validator(self,item)
             if error:
-                logger.error("chyba validace: %s" % (error,))
+                self.logger.error("chyba validace: %s" % (error,))
                 all_valid = False
                 if self.kwargs.get('oneerror',False):
                     return False
@@ -68,22 +75,25 @@ class Validator(object):
     def summary(self):
         return self.results
 
-    def validate(self,method=None):
+    def validate(self, condition=lambda name: True):
         """ zavolá všechny validace, co odpovídají argumentům programu.
         Pokud je zadana metoda. Zavola jen jedno dotycnou validaci.
         napr: 01_mets
         """
-        if method:
-            logger.debug('vybrana metoda validace: ' + method)
-        method_names = [ m for m in dir(self) if 'validate_' in m ]
-        method_names.sort()
-        methods = [ (getattr(self,m),m) for m in method_names if (method and m == ('validate_' + method)) or (not method) ]
+        method_names = self.validators(condition)
+        methods = [ (getattr(self,'validate_'+m),m) for m in method_names ]
         max_width = max( [len(get_short_description(m[0].__doc__)) for m in methods ] )
         out_format = "validator: {:<" + str(max_width) + '} *{:s}*'
         for (m,name) in methods:
-            logger.info(out_format.format(get_short_description(m.__doc__), name.split('validate_')[1]))
-            result = m()
-            self.results.append({'validator': name.split('validate_')[1], 'result': result})
+            self.logger.info(out_format.format(get_short_description(m.__doc__), name))
+            try:
+                result = m()
+                self.results.append({'validator': name, 'result': result})
+            except:
+                msg = str(sys.exc_info()[:2])
+                sys.exc_clear()
+                self.logger.error(msg)
+                self.results.append({'validator': name, 'result': msg})
         pass
 
     def validate_01_mets(self):
@@ -91,30 +101,30 @@ class Validator(object):
         validuje hlavní METS soubor podle specifikace METS"""
         mets = self.psp.mets
         schema = self.catalog.mets
-        logger.debug("volam schema.validate")
+        self.logger.debug("volam schema.validate")
         result = schema.validate(mets.etree)
-        logger.debug("vysledek schema.validate:" + str(result))
+        self.logger.debug("vysledek schema.validate:" + str(result))
         if not result:
-            logger.error("validace souboru %s skoncila s chybou: %s" % (str(mets), schema.error_log))
+            self.logger.error("validace souboru %s skoncila s chybou: %s" % (os.path.basename(str(mets)), schema.error_log))
         return result
 
     def validate_01_mets_mods(self):
-        """ validace vnitřku hlavního METS souboru
+        """ validace vnitřku hlavního METS souboru, specifikace MODS
         validuje vnitřní položky MODS v hlavním METS soubor podle specifikace MODS"""
         mets = self.psp.mets
         elems = mets.etree.xpath("//mods:mods",  namespaces = self.catalog.namespaces)
         if len(elems) == 0:
-            logger.error("nenasel jsem zadnou mods polozku")
+            self.logger.error("nenasel jsem zadnou mods polozku")
             return False
         
-        logger.debug('nalezene mods elementy: ' + str(elems))
+        self.logger.debug('nalezene mods elementy: ' + str(elems))
         
         schema = self.catalog.mods
         results = [ schema.validate(m) and {'success':True, 'msg': ""} or {'success': False, 'msg': schema.error_log } for m in elems ]
-        logger.debug("vysledky schema.validate:" + str(results))
+        self.logger.debug("vysledky schema.validate:" + str(results))
         some_error = False in [ r['success']  for r in results ]
         if some_error:
-            logger.error('chyby validace: ' + str([r['msg'] for r in results if r]))
+            self.logger.error('chyby validace: ' + str([r['msg'] for r in results if r]))
             return False
         return True
 
@@ -124,17 +134,17 @@ class Validator(object):
         mets = self.psp.mets
         elems = mets.etree.xpath("//dc:dc", namespaces = self.catalog.namespaces)
         if len(elems) == 0:
-            logger.error("nenasel jsem zadnou Dublin Core polozku")
+            self.logger.error("nenasel jsem zadnou Dublin Core polozku")
             return False
 
-        logger.debug('nalezene DC elementy: ' + str(elems))
+        self.logger.debug('nalezene DC elementy: ' + str(elems))
         
         schema = self.catalog.dc
         results = [ schema.validate(m) and {'success':True, 'msg': ""} or {'success': False, 'msg': schema.error_log } for m in elems ]
-        logger.debug("vysledky schema.validate:" + str(results))
+        self.logger.debug("vysledky schema.validate:" + str(results))
         some_error = False in [ r['success']  for r in results ]
         if some_error:
-            logger.error('chyby validace: ' + str([r['msg'] for r in results if r]))
+            self.logger.error('chyby validace: ' + str([r['msg'] for r in results if r]))
             return False
         return True
 
@@ -160,10 +170,10 @@ class Validator(object):
 
         def validator(self,mets_file):
             declared_checksum = mets_file.xpath("./@CHECKSUM")[0]
-            logger.debug('uvedene CHECKSUM je: %s' % (declared_checksum,))
+            self.logger.debug('uvedene CHECKSUM je: %s' % (declared_checksum,))
             fpath = mets_file.xpath("./mets:FLocat/@xlink:href", namespaces = self.catalog.namespaces)[0]
             m = hashlib.md5()
-            logger.debug('fpath je: %s' % (fpath,))
+            self.logger.debug('fpath je: %s' % (fpath,))
             fh = open(self.psp.join(fpath), 'rb')
             while True:
                 data = fh.read(8192)
@@ -187,7 +197,7 @@ class Validator(object):
                       
         def validator(self,fpath):
             """validace souboru podle schematu METS. Elementy PREMIS a MIX se validuji samostatne v dalsim validatoru."""
-            logger.debug("validuji: " + fpath)
+            self.logger.debug("validuji: " + fpath)
             xml_file = etree.parse(fpath)
             
             """ prehodime xsi:type na type. Pak projde validace pres METS. premis:object zvalidujeme v puvodni verzi v dalsim validatoru. """
@@ -201,7 +211,7 @@ class Validator(object):
                     
             result = self.catalog.mets.validate(xml_file)
             if not result:
-                return self.catalog.mets.error_log
+                return self.catalog.mets.error_log.replace(fpath,os.path.basename(fpath))
             return None
                 
         #return self.for_each([fpaths[0]], validator)
@@ -218,7 +228,7 @@ class Validator(object):
 
         def validator(self,fpath):
             """validace jednotlivých PREMIS a MIX částí"""
-            logger.debug("validuji: " + fpath)
+            self.logger.debug("validuji: " + fpath)
             premis = self.catalog.premis
             mix = self.catalog.mix
             xml_file = etree.parse(fpath)
@@ -226,19 +236,19 @@ class Validator(object):
 
             # premis elementy
             elems = xml_file.xpath("/*/*/*/mets:mdWrap[@MDTYPE='PREMIS']/mets:xmlData/premis:object", namespaces = self.catalog.namespaces)
-            results = [ premis.validate(elem) and {'success':True, 'msg': ""} or {'success': False, 'msg': premis.error_log } for elem in elems ]
-            logger.debug("vysledky schema.validate:" + str(results))
+            results = [ premis.validate(elem) and {'success':True, 'msg': ""} or {'success': False, 'msg': str(premis.error_log).replace(fpath,os.path.basename(fpath)) } for elem in elems ]
+            self.logger.debug("vysledky schema.validate:" + str(results))
             some_error = False in [ r['success']  for r in results ]
             if some_error:
-                error = 'chyby validace souboru %s: %s' % (fpath,"|".join([str(r['msg']) for r in results if r]))
+                error = 'chyby validace souboru %s: %s' % (os.path.basename(fpath),"\n\t".join([str(r['msg']) for r in results if r]))
                 
             # mix elementy
             elems = xml_file.xpath("/*/*/*/mets:mdWrap/mets:xmlData/mix:mix", namespaces = self.catalog.namespaces)
-            results = [ mix.validate(elem) and {'success':True, 'msg': ""} or {'success': False, 'msg': mix.error_log } for elem in elems ]
-            logger.debug("vysledky schema.validate:" + str(results))
+            results = [ mix.validate(elem) and {'success':True, 'msg': ""} or {'success': False, 'msg': str(mix.error_log).replace(fpath,os.path.basename(fpath)) } for elem in elems ]
+            self.logger.debug("vysledky schema.validate:" + str(results))
             some_error = False in [ r['success']  for r in results ]
             if some_error:
-                error = (error or "") + 'chyby validace souboru %s: %s' % (fpath,"|".join([str(r['msg']) for r in results if r]))
+                error = (error or "") + 'chyby validace souboru %s: %s' % (os.path.basename(fpath),"\n\t".join([str(r['msg']) for r in results if r]))
 
             return error
         
@@ -258,7 +268,7 @@ class Validator(object):
             xml_file = etree.parse(fpath)
             result = self.catalog.alto.validate(xml_file)
             if not result:
-                return self.catalog.alto.error_log
+                return str(self.catalog.alto.error_log).replace(fpath,os.path.basename(fpath))
             return None
 
         return self.for_each(fpaths, validator)
