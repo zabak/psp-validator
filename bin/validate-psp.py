@@ -158,10 +158,10 @@ for psp in psps:
                                    format_string = "{:<" + str(max_width) + "}"
                                    return format_string.format(s)
                             return formatter
-                                   
-              logger.setLevel(logging.INFO)
-              formatter = prepare_setFixedWidth(max([len(ii['validator']) for ii in validator.summary]))
-              logger.info("vysledky validace:\n\t" + "\n\t".join([ "%s: %s" %( formatter(ii['validator']), ii['result'] and 'OK' or 'Error') for ii in validator.summary]))
+                                                        
+                     logger.setLevel(logging.INFO)
+                     formatter = prepare_setFixedWidth(max([len(ii['validator']) for ii in validator.summary]))
+                     logger.info("vysledky validace:\n\t" + "\n\t".join([ "%s: %s" %( formatter(ii['validator']), ii['result'] and 'OK' or 'Error') for ii in validator.summary]))
        except:
               logger.error("chyba pri validaci souboru: %s\n\t%s" % (psp, traceback.format_exc()))
               sys.exc_clear()
