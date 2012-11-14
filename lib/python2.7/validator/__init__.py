@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from settings import schema_catalog, workdir
-import re, os.path
+import re, os.path, sys, traceback
 from .catalog import Catalog
 from lxml import etree
 from functools import partial
@@ -8,7 +8,7 @@ import hashlib
 
 def get_short_description(doc):
     result = re.search("^[\ \t]*([^\n]+)", doc, re.MULTILINE)
-    return result.group(1)
+    return result.group(1).strip()
 
  
 class Validator(object):
@@ -67,7 +67,7 @@ class Validator(object):
             if error:
                 self.logger.error("chyba validace: %s" % (error,))
                 all_valid = False
-                if self.kwargs.get('oneerror',False):
+                if not self.kwargs.get('all_files',False):
                     return False
         return all_valid
         
@@ -82,7 +82,7 @@ class Validator(object):
         """
         method_names = self.validators(condition)
         methods = [ (getattr(self,'validate_'+m),m) for m in method_names ]
-        max_width = max( [len(get_short_description(m[0].__doc__)) for m in methods ] )
+        max_width = max( [len(get_short_description(m[0].__doc__)) for m in methods ])
         out_format = "validator: {:<" + str(max_width) + '} *{:s}*'
         for (m,name) in methods:
             self.logger.info(out_format.format(get_short_description(m.__doc__), name))
@@ -90,10 +90,10 @@ class Validator(object):
                 result = m()
                 self.results.append({'validator': name, 'result': result})
             except:
-                msg = str(sys.exc_info()[:2])
+                msg = traceback.format_exc()
                 sys.exc_clear()
                 self.logger.error(msg)
-                self.results.append({'validator': name, 'result': msg})
+                self.results.append({'validator': name, 'result': False})
         pass
 
     def validate_01_mets(self):
@@ -255,7 +255,7 @@ class Validator(object):
         return self.for_each(fpaths, validator)
         #return self.for_each([fpaths[0]], validator)
 
-    def validate_04_altos(self):
+    def validat_04_altos(self):
         """ validace souborů v adresáři =ALTO=
         zkontroluje předběžně každý soubor ve složce ALTO podle schematu ALTO"""
 
