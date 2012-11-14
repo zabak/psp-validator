@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-import argparse, os, sys, tempfile
+import argparse, os, sys, tempfile,traceback
 import glob
 
 # pridame lokalni knihovny
@@ -33,6 +33,10 @@ Program rozbalí zadaný PSP balíček do adresáře %s
 
 Pokud je zadaný adresář, tak vezme všechny soubory, co mají příponu =.zip=
 a pokusí se je zkontrolovat.
+
+Pokud se při kontrole souborů v adresáři amdSec, ... objeví chyba,
+program skončí u prvního souboru s chybou.
+Většinou se chyby opakují a tak by bylo hodně stejných chyb.
 """ % (str(workdir), ),
                                  formatter_class = argparse.RawTextHelpFormatter
                                  )
@@ -96,8 +100,8 @@ parser.add_argument('--normdir',
                     default=False,
                     required=False)
 
-parser.add_argument('-o','--oneerror',
-                    help='Kdyz se validuji soubory v adresari, tak skonci pri prvni chybe. Aby tech chyb nebylo moc.',
+parser.add_argument('-a','--all-files',
+                    help='Kdyz se validuji soubory v adresari, probere vsechny soubory, i kdyz se objevi chyba.',
                     action='store_true',
                     default=False,
                     required=False)
@@ -127,7 +131,12 @@ if args.debug:
 
 logger.debug("pracovni adresar je: " + str(workdir))
 psps = (os.path.isdir(args.PSP) and  glob.glob(os.path.join(args.PSP,'*.zip'))) \
-    or (os.path.isfile(args.PSP) and [args.PSP])
+    or (os.path.isfile(args.PSP) and [args.PSP]) 
+
+if not psps:
+       logger.error(str(args.PSP) + " neexistuje")
+       workdir.rmdir()
+       sys.exit(1)
 
 for psp in psps:
        basename = os.path.basename(os.path.splitext(os.path.splitext(psp)[0])[0])
@@ -154,7 +163,7 @@ for psp in psps:
               formatter = prepare_setFixedWidth(max([len(ii['validator']) for ii in validator.summary]))
               logger.info("vysledky validace:\n\t" + "\n\t".join([ "%s: %s" %( formatter(ii['validator']), ii['result'] and 'OK' or 'Error') for ii in validator.summary]))
        except:
-              logger.error(str(sys.exc_info()[:2]))
+              logger.error(traceback.format_exc())
               sys.exc_clear()
        logger.removeHandler(file_log_handler)
        file_log_handler.close()
