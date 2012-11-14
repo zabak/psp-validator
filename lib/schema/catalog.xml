@@ -18,6 +18,7 @@
   <system systemId="http://www.w3.org/2001/XMLSchema.xsd" uri="file:///opt/psp-validator/lib/schema/XMLSchema.xsd"/>
   <system systemId="http://www.loc.gov/standards/xlink/xlink.xsd" uri="file:///opt/psp-validator/lib/schema/xlink.xsd"/>
   <system systemId="http://www.w3.org/2001/xml.xsd" uri="file:///opt/psp-validator/lib/schema/xml.xsd"/>
+  <system systemId="http://www.w3.org/2001/03/xml.xsd" uri="file:///opt/psp-validator/lib/schema/xml.xsd"/>
   <system systemId="http://www.loc.gov/mods/xml.xsd" uri="file:///opt/psp-validator/lib/schema/xml.xsd"/>
   <system systemId="http://www.loc.gov/standards/alto/alto-v2.0.xsd" uri="file:///opt/psp-validator/lib/schema/alto-v2.0.xsd"/>
 </catalog>
