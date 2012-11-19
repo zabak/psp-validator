@@ -44,13 +44,48 @@
           <div class="body">
             
   <div class="section" id="psp-validator">
-<h1>PSP validátor<a class="headerlink" href="#psp-validator" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id1">PSP validátor</a><a class="headerlink" href="#psp-validator" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#psp-validator" id="id1">PSP validátor</a><ul>
+<li><a class="reference internal" href="#ve-zkratce" id="id2">Ve zkratce</a></li>
+<li><a class="reference internal" href="#co-umi" id="id3">Co umí</a></li>
+<li><a class="reference internal" href="#instalace" id="id4">Instalace</a><ul>
+<li><a class="reference internal" href="#windows" id="id5">Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#volani" id="id6">Volání</a><ul>
+<li><a class="reference internal" href="#prehled-dostupnych-validaci" id="id7">Přehled dostupných validací</a></li>
+<li><a class="reference internal" href="#priklad-validace-mets-souboru" id="id8">příklad validace METS souboru</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jednotlive-validace" id="id9">Jednotlivé validace</a><ul>
+<li><a class="reference internal" href="#prehled" id="id10">přehled</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rady" id="id11">rady</a><ul>
+<li><a class="reference internal" href="#chci-prehledny-vypis" id="id12">Chci přehledný výpis</a></li>
+<li><a class="reference internal" href="#chci-validovat-jen-hlavni-mets-soubor" id="id13">Chci validovat jen hlavní <tt class="docutils literal"><span class="pre">METS</span></tt> soubor</a></li>
+<li><a class="reference internal" href="#chci-videt-seznam-validaci-co-program-umi" id="id14">Chci vidět seznam validací, co program umí</a></li>
+<li><a class="reference internal" href="#chci-videt-informace-o-jedne-validaci" id="id15">Chci vidět informace o jedné validaci</a></li>
+<li><a class="reference internal" href="#chci-videt-pouze-vysledky-na-konci" id="id16">Chci vidět pouze výsledky na konci</a></li>
+<li><a class="reference internal" href="#chci-videt-vysledky-i-prubeh-validace" id="id17">Chci vidět výsledky i průběh validace</a></li>
+<li><a class="reference internal" href="#chci-provest-jen-urcitou-validaci" id="id18">Chci provést jen určitou validaci</a></li>
+<li><a class="reference internal" href="#chci-zachovat-rozbaleny-balicek" id="id19">Chci zachovat rozbalený balíček</a></li>
+<li><a class="reference internal" href="#kdyz-program-vypisuje-hodne-chyb" id="id20">Když program vypisuje hodně chyb</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
 </div>
 <div class="section" id="ve-zkratce">
-<h2>Ve zkratce<a class="headerlink" href="#ve-zkratce" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2">Ve zkratce</a><a class="headerlink" href="#ve-zkratce" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Program validuje <tt class="docutils literal"><span class="pre">PSP</span></tt> balíček, nebo celý adresář <tt class="docutils literal"><span class="pre">PSP</span></tt> balíčků.</p>
 <p><tt class="docutils literal"><span class="pre">PSP</span></tt> se používá k uchování digitálních informací o periodikách a monografiích.
@@ -82,7 +117,7 @@ Tento balíček používá <a class="reference external" href="http://www.nkp.cz
 </div></blockquote>
 </div>
 <div class="section" id="co-umi">
-<h2>Co umí<a class="headerlink" href="#co-umi" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">Co umí</a><a class="headerlink" href="#co-umi" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
 <li>[X] validuje hlavní soubor <tt class="docutils literal"><span class="pre">METS</span></tt> podle schematu <tt class="docutils literal"><span class="pre">METS</span></tt></li>
@@ -100,9 +135,9 @@ Tento balíček používá <a class="reference external" href="http://www.nkp.cz
 </div></blockquote>
 </div>
 <div class="section" id="instalace">
-<h2>Instalace<a class="headerlink" href="#instalace" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">Instalace</a><a class="headerlink" href="#instalace" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="windows">
-<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5">Windows</a><a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
 <li><p class="first">instalace python 2.7</p>
 <ul class="simple">
@@ -137,7 +172,7 @@ Ten se nainstaluje.</p>
 </div>
 </div>
 <div class="section" id="volani">
-<h2>Volání<a class="headerlink" href="#volani" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Volání</a><a class="headerlink" href="#volani" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Pokud jsme ve <em>Windows</em>, tak se k cestě k programu přidá název disku: <tt class="docutils literal"><span class="pre">C:\Opt\psp-validator\bin\validate-psp.py</span> <span class="pre">--help</span></tt></p>
 <div class="highlight-python"><pre>usage: validate-psp.py [-h] [-m] [-v] [--version] [-l] [-d] [-i INFO] [-p PARTIAL] [-s] [--normdir] [-a] [PSP]
@@ -181,7 +216,7 @@ optional arguments:
 </div>
 </div></blockquote>
 <div class="section" id="prehled-dostupnych-validaci">
-<h3>Přehled dostupných validací<a class="headerlink" href="#prehled-dostupnych-validaci" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7">Přehled dostupných validací</a><a class="headerlink" href="#prehled-dostupnych-validaci" title="Permalink to this headline">¶</a></h3>
 <p>argument <tt class="docutils literal"><span class="pre">-l</span></tt> pomůže</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -l
 
@@ -197,7 +232,7 @@ seznam validací:
 </div>
 </div>
 <div class="section" id="priklad-validace-mets-souboru">
-<h3>příklad validace METS souboru<a class="headerlink" href="#priklad-validace-mets-souboru" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">příklad validace METS souboru</a><a class="headerlink" href="#priklad-validace-mets-souboru" title="Permalink to this headline">¶</a></h3>
 <p>program má validovat jen hlavní <tt class="docutils literal"><span class="pre">metadata</span></tt></p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -v -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip 2&gt;&amp;1
 
@@ -232,7 +267,7 @@ seznam validací:
 </div>
 </div>
 <div class="section" id="jednotlive-validace">
-<h2>Jednotlivé validace<a class="headerlink" href="#jednotlive-validace" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Jednotlivé validace</a><a class="headerlink" href="#jednotlive-validace" title="Permalink to this headline">¶</a></h2>
 <p>Informace o jednotlivých validacích si můžeme zobrazit volbou <tt class="docutils literal"><span class="pre">-i</span></tt></p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -i 01_mets
 
@@ -240,7 +275,7 @@ seznam validací:
         validuje hlavní METS soubor podle specifikace METS</pre>
 </div>
 <div class="section" id="prehled">
-<h3>přehled<a class="headerlink" href="#prehled" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">přehled</a><a class="headerlink" href="#prehled" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -284,58 +319,58 @@ To je formát METS a vevnitřs jsou polozky =premis:object= podle schematu PREMI
 </div>
 </div>
 <div class="section" id="rady">
-<h2>rady<a class="headerlink" href="#rady" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id11">rady</a><a class="headerlink" href="#rady" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="chci-prehledny-vypis">
-<h3>Chci přehledný výpis<a class="headerlink" href="#chci-prehledny-vypis" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id12">Chci přehledný výpis</a><a class="headerlink" href="#chci-prehledny-vypis" title="Permalink to this headline">¶</a></h3>
 <p>Program na konci vypíše jen přehled provedených validací.</p>
 <p>Při validaci jednotlivých souborů skončí při první chybě.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -s -o DIR</pre>
 </div>
 </div>
 <div class="section" id="chci-validovat-jen-hlavni-mets-soubor">
-<h3>Chci validovat jen hlavní <tt class="docutils literal"><span class="pre">METS</span></tt> soubor<a class="headerlink" href="#chci-validovat-jen-hlavni-mets-soubor" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id13">Chci validovat jen hlavní <tt class="docutils literal"><span class="pre">METS</span></tt> soubor</a><a class="headerlink" href="#chci-validovat-jen-hlavni-mets-soubor" title="Permalink to this headline">¶</a></h3>
 <p>Program provede jen validace spojené s hlavním =METS= souborem.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -m -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
 </div>
 </div>
 <div class="section" id="chci-videt-seznam-validaci-co-program-umi">
-<h3>Chci vidět seznam validací, co program umí<a class="headerlink" href="#chci-videt-seznam-validaci-co-program-umi" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">Chci vidět seznam validací, co program umí</a><a class="headerlink" href="#chci-videt-seznam-validaci-co-program-umi" title="Permalink to this headline">¶</a></h3>
 <p>Program vypíše seznam dostupných validací.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -l</pre>
 </div>
 </div>
 <div class="section" id="chci-videt-informace-o-jedne-validaci">
-<h3>Chci vidět informace o jedné validaci<a class="headerlink" href="#chci-videt-informace-o-jedne-validaci" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15">Chci vidět informace o jedné validaci</a><a class="headerlink" href="#chci-videt-informace-o-jedne-validaci" title="Permalink to this headline">¶</a></h3>
 <p>Program vypíše podrobné informace o vybrané validaci.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -i 04_altos</pre>
 </div>
 </div>
 <div class="section" id="chci-videt-pouze-vysledky-na-konci">
-<h3>Chci vidět pouze výsledky na konci<a class="headerlink" href="#chci-videt-pouze-vysledky-na-konci" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id16">Chci vidět pouze výsledky na konci</a><a class="headerlink" href="#chci-videt-pouze-vysledky-na-konci" title="Permalink to this headline">¶</a></h3>
 <p>Program na konci vypíše přehled provedených validací a jejich výsledek.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
 </div>
 </div>
 <div class="section" id="chci-videt-vysledky-i-prubeh-validace">
-<h3>Chci vidět výsledky i průběh validace<a class="headerlink" href="#chci-videt-vysledky-i-prubeh-validace" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17">Chci vidět výsledky i průběh validace</a><a class="headerlink" href="#chci-videt-vysledky-i-prubeh-validace" title="Permalink to this headline">¶</a></h3>
 <p>Program bude průběžně informovat o tom, co provádí a na konci vypíše přehled provedených validací a jejich výsledek.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -v -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
 </div>
 </div>
 <div class="section" id="chci-provest-jen-urcitou-validaci">
-<h3>Chci provést jen určitou validaci<a class="headerlink" href="#chci-provest-jen-urcitou-validaci" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id18">Chci provést jen určitou validaci</a><a class="headerlink" href="#chci-provest-jen-urcitou-validaci" title="Permalink to this headline">¶</a></h3>
 <p>Program provede jen vybranou validaci a skončí.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -p 03_techspecs /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
 </div>
 </div>
 <div class="section" id="chci-zachovat-rozbaleny-balicek">
-<h3>Chci zachovat rozbalený balíček<a class="headerlink" href="#chci-zachovat-rozbaleny-balicek" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id19">Chci zachovat rozbalený balíček</a><a class="headerlink" href="#chci-zachovat-rozbaleny-balicek" title="Permalink to this headline">¶</a></h3>
 <p>Program na konci ponechá rozbalený balíček.</p>
 <div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -s -p 03_techspecs --normdir /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
 </div>
 </div>
 <div class="section" id="kdyz-program-vypisuje-hodne-chyb">
-<h3>Když program vypisuje hodně chyb<a class="headerlink" href="#kdyz-program-vypisuje-hodne-chyb" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id20">Když program vypisuje hodně chyb</a><a class="headerlink" href="#kdyz-program-vypisuje-hodne-chyb" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul>
 <li><p class="first">pustím program se souhrnným výpisem na konci</p>

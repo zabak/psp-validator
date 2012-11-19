@@ -6,6 +6,8 @@
 PSP validátor
 =============
 
+.. contents::
+
 .. toctree::
    :maxdepth: 2
 
