@@ -380,7 +380,6 @@
     :         zkontroluje, zda existují všechny soubory na které se odkazují linky v hlavním souboru METS.
 
     
-
 *** kontrola souborů v adresáři =amdSec=
 **** ~03_techspecs~
     #+BEGIN_SRC sh :results output verbatim :exports both

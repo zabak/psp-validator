@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PSP validátor &mdash; PSP Validator 0.8.4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PSP Validator 0.8.4 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">PSP Validator 0.8.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="psp-validator">
+<h1>PSP validátor<a class="headerlink" href="#psp-validator" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="ve-zkratce">
+<h2>Ve zkratce<a class="headerlink" href="#ve-zkratce" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Program validuje <tt class="docutils literal"><span class="pre">PSP</span></tt> balíček, nebo celý adresář <tt class="docutils literal"><span class="pre">PSP</span></tt> balíčků.</p>
+<p><tt class="docutils literal"><span class="pre">PSP</span></tt> se používá k uchování digitálních informací o periodikách a monografiích.
+Tento balíček používá <a class="reference external" href="http://www.nkp.cz">Národní knihovna</a> k digitalizaci a uchování informací o periodikách a monografiích.</p>
+<p>Podrobnosti o formátech použitých v <tt class="docutils literal"><span class="pre">PSP</span></tt> balíčku jsou na stránkách <a class="reference external" href="http://www.ndk.cz/digitalizace/vystavena-nova-verze-definice-metadat-pro-periodika-a-monografie">Národní knihovny</a>.</p>
+<p>Program je vystaven v repozitáři <a class="reference external" href="https://code.google.com/p/psp-validator/">Google Code</a>.</p>
+<blockquote>
+<div><ul class="simple">
+<li>umi jednu verzi schematu</li>
+<li>schema se vyvyji</li>
+<li>budou chodit emaily</li>
+<li>komunikace v cestine</li>
+<li>repozitar na code.google.com</li>
+<li>software bude v anglictine</li>
+<li>prubezne verze standardu se nebudou publikovat</li>
+<li>zapojeni krajske knihovny do testovani - posilali by testovaci data pro testovani</li>
+<li>program by nemel skoncit na prvni chybe. protoze se schema vyvyji a neco uz nemusi byt chybou</li>
+<li>tentyz program by mel byt k dispozici na webu pro krajske knihovny, aby si mohly dopredu zkontrolovat data</li>
+<li>program bude mit volbu:<ul>
+<li>kontrolovat jen metadata (mets soubor)</li>
+<li>zkontrolvoat vsechno, vcetne metadat</li>
+<li>vypnout kontrolu ciselniku</li>
+</ul>
+</li>
+<li>udelat instalator pro windows</li>
+<li>vystup bude v textovem souboru</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="co-umi">
+<h2>Co umí<a class="headerlink" href="#co-umi" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>[X] validuje hlavní soubor <tt class="docutils literal"><span class="pre">METS</span></tt> podle schematu <tt class="docutils literal"><span class="pre">METS</span></tt></li>
+<li>[X] validuje položky <tt class="docutils literal"><span class="pre">dc</span></tt> v hlavním souboru <tt class="docutils literal"><span class="pre">METS</span></tt> podle schematu <tt class="docutils literal"><span class="pre">Dublin</span> <span class="pre">Core</span></tt></li>
+<li>[X] validuje soubory v adresáři <tt class="docutils literal"><span class="pre">amdSec</span></tt> podle schematu <tt class="docutils literal"><span class="pre">METS</span></tt></li>
+<li>[X] validuje jednotlivé části <tt class="docutils literal"><span class="pre">premis:object</span></tt> a <tt class="docutils literal"><span class="pre">mix:mix</span></tt> v souborech v adresáři <tt class="docutils literal"><span class="pre">amdsec</span></tt></li>
+<li>[X] zkontroluje, že všechny linky, které jsou v souboru <tt class="docutils literal"><span class="pre">METS</span></tt>, existují</li>
+<li>[X] zkontroluje <tt class="docutils literal"><span class="pre">MD5</span></tt> součet všech souborů, na které se soubor <tt class="docutils literal"><span class="pre">METS</span></tt> odkazuje</li>
+<li>[X] validuje soubory v adresáři <tt class="docutils literal"><span class="pre">ALTO</span></tt> podle schematu <tt class="docutils literal"><span class="pre">ALTO</span></tt></li>
+</ul>
+<p>Program vypisuje informace o průběhu validací na konzoli a současně do souboru <tt class="docutils literal"><span class="pre">log/messages.log</span></tt>.</p>
+<p>Pokud program validuje více balíčků, tak ke každému balíčku doplní samostatný log soubor s výpisy průběhu validace.</p>
+<p>Validovaný balíček rozbaluje do adresáře <tt class="docutils literal"><span class="pre">tmp</span></tt>.</p>
+<p>Pokud se programu místo souboru zadá adresář, předpokládá, že v něm jsou <tt class="docutils literal"><span class="pre">PSP</span></tt> souboru. Ty všechny zvaliduje.</p>
+</div></blockquote>
+</div>
+<div class="section" id="instalace">
+<h2>Instalace<a class="headerlink" href="#instalace" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">instalace python 2.7</p>
+<ul class="simple">
+<li>stáhnout aktuální verzi pythonu <a class="reference external" href="http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi">http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi</a>
+a nainstalovat ji.</li>
+<li>nastavit cesty k binárkám pythonu
+aby se dal volat python v <tt class="docutils literal"><span class="pre">cmd</span></tt>.</li>
+</ul>
+</li>
+<li><p class="first">instalace lxml</p>
+<ul>
+<li><p class="first">instalace binárek
+<a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml">http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml</a></p>
+<p>vybere se lxml-X.X.X.win*.exe
+Ten se nainstaluje.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">instalace programu</p>
+<blockquote>
+<div><ul class="simple">
+<li>uloží se <tt class="docutils literal"><span class="pre">zip</span></tt> balíček ze sekce <a class="reference external" href="https://code.google.com/p/psp-validator/downloads/list">https://code.google.com/p/psp-validator/downloads/list</a></li>
+<li>rozbalí se do adresáře <tt class="docutils literal"><span class="pre">C:\Opt</span></tt></li>
+</ul>
+<p>Takže program bude v adresáři: <tt class="docutils literal"><span class="pre">C:\Opt\psp-validator</span></tt></p>
+<ul class="simple">
+<li>do proměnné <tt class="docutils literal"><span class="pre">PATH</span></tt> se doplní cesta k programu: <tt class="docutils literal"><span class="pre">C:\Opt\psp-validator\bin</span></tt></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="volani">
+<h2>Volání<a class="headerlink" href="#volani" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Pokud jsme ve <em>Windows</em>, tak se k cestě k programu přidá název disku: <tt class="docutils literal"><span class="pre">C:\Opt\psp-validator\bin\validate-psp.py</span> <span class="pre">--help</span></tt></p>
+<div class="highlight-python"><pre>usage: validate-psp.py [-h] [-m] [-v] [--version] [-l] [-d] [-i INFO] [-p PARTIAL] [-s] [--normdir] [-a] [PSP]
+
+Program validuje PSP balíček.
+
+Umí validovat na třech úrovních:
+- METS soubor
+- hodnoty z číselníků existují
+- linky, na ktere se v balíčku odkazuje existují
+
+Každá z těchto voleb se dá vypnout.
+
+Program rozbalí zadaný PSP balíček do adresáře /opt/psp-validator/tmp/PSP-Validation-2012-11-19-3wRkot
+
+Pokud je zadaný adresář, tak vezme všechny soubory, co mají příponu =.zip=
+a pokusí se je zkontrolovat.
+
+Pokud se při kontrole souborů v adresáři amdSec, ... objeví chyba,
+program skončí u prvního souboru s chybou.
+Většinou se chyby opakují a tak by bylo hodně stejných chyb.
+
+positional arguments:
+PSP                   cesta k PSP balíčku. Muze to byt soubor, nebo adresar. Pokud to je adresar,
+                      vezme všechny soubory a zvaliduje je.
+
+optional arguments:
+-h, --help            show this help message and exit
+-m, --mets            zkontroluje METS soubor
+-v, --verbose         hlášky programu budou podrobnější
+--version             verze programu. Vypíše i verzi dokumentace, co popisuje strukturu PSP balíčku
+-l, --list-validators
+                      zobrazí seznam validací, co program umí
+-d, --debug           zobrazí ladici hlasky
+-i INFO, --info INFO  zobrazí popis vybrané validace
+-p PARTIAL, --partial PARTIAL
+                   zavola jen jeden kontretni krok validace. Seznam validaci vypisuje argument -l
+-s, --summary         na konci vypíše přehled testů, co provedl a s jakým skončily výsledkem.
+--normdir             na konci se maže pracovní adresář. S tímto argumentem se adresář nesmaže.
+-a, --all-files       Kdyz se validuji soubory v adresari, probere vsechny soubory, i kdyz se objevi chyba.</pre>
+</div>
+</div></blockquote>
+<div class="section" id="prehled-dostupnych-validaci">
+<h3>Přehled dostupných validací<a class="headerlink" href="#prehled-dostupnych-validaci" title="Permalink to this headline">¶</a></h3>
+<p>argument <tt class="docutils literal"><span class="pre">-l</span></tt> pomůže</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -l
+
+seznam validací:
+     01_mets
+     01_mets_dc
+     01_mets_mods
+     02_links_checksums
+     02_links_exist
+     03_techspecs
+     03_techspecs_premis_mix
+     04_altos</pre>
+</div>
+</div>
+<div class="section" id="priklad-validace-mets-souboru">
+<h3>příklad validace METS souboru<a class="headerlink" href="#priklad-validace-mets-souboru" title="Permalink to this headline">¶</a></h3>
+<p>program má validovat jen hlavní <tt class="docutils literal"><span class="pre">metadata</span></tt></p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -v -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip 2&gt;&amp;1
+
+2012-10-28 21:24:52,381 PSP_VALIDATION       INFO    - budu validovat soubor /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip
+2012-10-28 21:24:52,381 PSP_VALIDATION       INFO    - pracuji v adresari: /opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI
+2012-10-28 21:24:52,381 PSP_VALIDATION       INFO    - validator: validace hlavního METS souboru                                                 *01_mets*
+2012-10-28 21:24:55,745 PSP_VALIDATION       INFO    - validator: validace vnitřku METS souboru, specifikace DC                                  *01_mets_dc*
+2012-10-28 21:24:56,723 PSP_VALIDATION       INFO    - validator: validace vnitřku hlavního METS souboru                                        *01_mets_mods*
+2012-10-28 21:24:56,737 PSP_VALIDATION       INFO    - validator: kontrola CHECKSUM všech souborů na které se v hlavním METS souboru odkazuje *02_links_checksums*
+2012-10-28 21:24:57,591 PSP_VALIDATION       INFO    - validator: validace linek v hlavním METS souboru                                          *02_links_exist*
+2012-10-28 21:24:57,653 PSP_VALIDATION       INFO    - validator: validace souborů ve složce amdSec                                             *03_techspecs*
+2012-10-28 21:24:57,716 PSP_VALIDATION       INFO    - validator: validace souborů ve složce amdSec na technická metadata                      *03_techspecs_premis_mix*
+2012-10-28 21:24:57,731 PSP_VALIDATION       ERROR   - chyba validace: chyby validace souboru /opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml: /opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml:11:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_4_2: Element '{info:lc/xmlns/premis-v2}object', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'file' of the xsi:type attribute does not resolve to a type definition.
+/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml:11:0:ERROR:SCHEMASV:SCHEMAV_CVC_TYPE_2: Element '{info:lc/xmlns/premis-v2}object': The type definition is abstract.|/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml:64:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_4_2: Element '{info:lc/xmlns/premis-v2}object', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'file' of the xsi:type attribute does not resolve to a type definition.
+/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml:64:0:ERROR:SCHEMASV:SCHEMAV_CVC_TYPE_2: Element '{info:lc/xmlns/premis-v2}object': The type definition is abstract.|/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml:117:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_4_2: Element '{info:lc/xmlns/premis-v2}object', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'file' of the xsi:type attribute does not resolve to a type definition.
+/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0001.xml:117:0:ERROR:SCHEMASV:SCHEMAV_CVC_TYPE_2: Element '{info:lc/xmlns/premis-v2}object': The type definition is abstract.
+2012-10-28 21:24:57,805 PSP_VALIDATION       ERROR   - chyba validace: chyby validace souboru /opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml: /opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml:11:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_4_2: Element '{info:lc/xmlns/premis-v2}object', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'file' of the xsi:type attribute does not resolve to a type definition.
+/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml:11:0:ERROR:SCHEMASV:SCHEMAV_CVC_TYPE_2: Element '{info:lc/xmlns/premis-v2}object': The type definition is abstract.|/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml:64:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_4_2: Element '{info:lc/xmlns/premis-v2}object', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'file' of the xsi:type attribute does not resolve to a type definition.
+/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml:64:0:ERROR:SCHEMASV:SCHEMAV_CVC_TYPE_2: Element '{info:lc/xmlns/premis-v2}object': The type definition is abstract.|/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml:117:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_4_2: Element '{info:lc/xmlns/premis-v2}object', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'file' of the xsi:type attribute does not resolve to a type definition.
+/opt/psp-validator/tmp/PSP-Validation-2012-10-28-gQT1JI/complete_NDK-000000000008_1350896484227/amdSec/AMD_METS_cb6edb20-19ae-11e2-aff6-005056827e51_0038.xml:117:0:ERROR:SCHEMASV:SCHEMAV_CVC_TYPE_2: Element '{info:lc/xmlns/premis-v2}object': The type definition is abstract.
+2012-10-28 21:24:57,806 PSP_VALIDATION       INFO    - validator: validace souborů v adresáři =ALTO=                                           *04_altos*
+2012-10-28 21:24:57,835 PSP_VALIDATION       INFO    - vysledky validace:
+        01_mets                : OK
+        01_mets_dc             : OK
+        01_mets_mods           : OK
+        02_links_checksums     : OK
+        02_links_exist         : OK
+        03_techspecs           : OK
+        03_techspecs_premis_mix: Error
+        04_altos               : OK</pre>
+</div>
+</div>
+</div>
+<div class="section" id="jednotlive-validace">
+<h2>Jednotlivé validace<a class="headerlink" href="#jednotlive-validace" title="Permalink to this headline">¶</a></h2>
+<p>Informace o jednotlivých validacích si můžeme zobrazit volbou <tt class="docutils literal"><span class="pre">-i</span></tt></p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -i 01_mets
+
+   validace hlavního METS souboru
+        validuje hlavní METS soubor podle specifikace METS</pre>
+</div>
+<div class="section" id="prehled">
+<h3>přehled<a class="headerlink" href="#prehled" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="36%" />
+<col width="54%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>01_mets</td>
+<td>validace hlavního METS souboru</td>
+<td>validuje hlavní METS soubor podle specifikace METS</td>
+</tr>
+<tr class="row-even"><td>01_mets_dc</td>
+<td>validace vnitřku METS souboru, specifikace DC</td>
+<td>validuje vnitřní položky DC v METS soubor podle specifikace Dublin Core</td>
+</tr>
+<tr class="row-odd"><td>01_mets_mods</td>
+<td>validace vnitřku hlavního METS souboru, specifikace MODS</td>
+<td>validuje vnitřní položky MODS v hlavním METS soubor podle specifikace MODS</td>
+</tr>
+<tr class="row-even"><td>02_links_checksums</td>
+<td>kontrola CHECKSUM všech souborů na které se v hlavním METS souboru odkazuje</td>
+<td>zkontroluje, zda mají soubory, na které linky odkazují, správnou CHECKSUM.</td>
+</tr>
+<tr class="row-odd"><td>02_links_exist</td>
+<td>validace linek v hlavním METS souboru</td>
+<td>zkontroluje, zda existují všechny soubory na které se odkazují linky v hlavním souboru METS.</td>
+</tr>
+<tr class="row-even"><td>03_techspecs</td>
+<td>validace souborů ve složce amdSec</td>
+<td>zkontroluje předběžně jednotlivé soubory ve složce =amdSec= podle formátu METS</td>
+</tr>
+<tr class="row-odd"><td>03_techspecs_premis_mix</td>
+<td>validace souborů ve složce amdSec na technická metadata</td>
+<td>zkontroluje, zda jednotlivé soubory odpovídají použitým schematům.
+To je formát METS a vevnitřs jsou polozky =premis:object= podle schematu PREMIS v2.1. a položky =mix:mix= ve formatu MIX</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="rady">
+<h2>rady<a class="headerlink" href="#rady" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="chci-prehledny-vypis">
+<h3>Chci přehledný výpis<a class="headerlink" href="#chci-prehledny-vypis" title="Permalink to this headline">¶</a></h3>
+<p>Program na konci vypíše jen přehled provedených validací.</p>
+<p>Při validaci jednotlivých souborů skončí při první chybě.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -s -o DIR</pre>
+</div>
+</div>
+<div class="section" id="chci-validovat-jen-hlavni-mets-soubor">
+<h3>Chci validovat jen hlavní <tt class="docutils literal"><span class="pre">METS</span></tt> soubor<a class="headerlink" href="#chci-validovat-jen-hlavni-mets-soubor" title="Permalink to this headline">¶</a></h3>
+<p>Program provede jen validace spojené s hlavním =METS= souborem.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -m -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
+</div>
+</div>
+<div class="section" id="chci-videt-seznam-validaci-co-program-umi">
+<h3>Chci vidět seznam validací, co program umí<a class="headerlink" href="#chci-videt-seznam-validaci-co-program-umi" title="Permalink to this headline">¶</a></h3>
+<p>Program vypíše seznam dostupných validací.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -l</pre>
+</div>
+</div>
+<div class="section" id="chci-videt-informace-o-jedne-validaci">
+<h3>Chci vidět informace o jedné validaci<a class="headerlink" href="#chci-videt-informace-o-jedne-validaci" title="Permalink to this headline">¶</a></h3>
+<p>Program vypíše podrobné informace o vybrané validaci.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -i 04_altos</pre>
+</div>
+</div>
+<div class="section" id="chci-videt-pouze-vysledky-na-konci">
+<h3>Chci vidět pouze výsledky na konci<a class="headerlink" href="#chci-videt-pouze-vysledky-na-konci" title="Permalink to this headline">¶</a></h3>
+<p>Program na konci vypíše přehled provedených validací a jejich výsledek.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
+</div>
+</div>
+<div class="section" id="chci-videt-vysledky-i-prubeh-validace">
+<h3>Chci vidět výsledky i průběh validace<a class="headerlink" href="#chci-videt-vysledky-i-prubeh-validace" title="Permalink to this headline">¶</a></h3>
+<p>Program bude průběžně informovat o tom, co provádí a na konci vypíše přehled provedených validací a jejich výsledek.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -v -s /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
+</div>
+</div>
+<div class="section" id="chci-provest-jen-urcitou-validaci">
+<h3>Chci provést jen určitou validaci<a class="headerlink" href="#chci-provest-jen-urcitou-validaci" title="Permalink to this headline">¶</a></h3>
+<p>Program provede jen vybranou validaci a skončí.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -p 03_techspecs /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
+</div>
+</div>
+<div class="section" id="chci-zachovat-rozbaleny-balicek">
+<h3>Chci zachovat rozbalený balíček<a class="headerlink" href="#chci-zachovat-rozbaleny-balicek" title="Permalink to this headline">¶</a></h3>
+<p>Program na konci ponechá rozbalený balíček.</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -s -p 03_techspecs --normdir /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
+</div>
+</div>
+<div class="section" id="kdyz-program-vypisuje-hodne-chyb">
+<h3>Když program vypisuje hodně chyb<a class="headerlink" href="#kdyz-program-vypisuje-hodne-chyb" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul>
+<li><p class="first">pustím program se souhrnným výpisem na konci</p>
+</li>
+<li><p class="first">zjistím, které validace neprošly</p>
+</li>
+<li><p class="first">pustím program s dotyčnou validací a aby skončil při první chybě a zachoval rozbalený balíček</p>
+<div class="highlight-python"><pre>/opt/psp-validator/bin/validate-psp.py -v -s -p 03_techspecs --normdir /opt/psp-validator/tmp/complete_NDK-000000000008_1350896484227.zip</pre>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PSP validátor</a><ul>
+<li><a class="reference internal" href="#ve-zkratce">Ve zkratce</a></li>
+<li><a class="reference internal" href="#co-umi">Co umí</a></li>
+<li><a class="reference internal" href="#instalace">Instalace</a><ul>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#volani">Volání</a><ul>
+<li><a class="reference internal" href="#prehled-dostupnych-validaci">Přehled dostupných validací</a></li>
+<li><a class="reference internal" href="#priklad-validace-mets-souboru">příklad validace METS souboru</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jednotlive-validace">Jednotlivé validace</a><ul>
+<li><a class="reference internal" href="#prehled">přehled</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rady">rady</a><ul>
+<li><a class="reference internal" href="#chci-prehledny-vypis">Chci přehledný výpis</a></li>
+<li><a class="reference internal" href="#chci-validovat-jen-hlavni-mets-soubor">Chci validovat jen hlavní <tt class="docutils literal"><span class="pre">METS</span></tt> soubor</a></li>
+<li><a class="reference internal" href="#chci-videt-seznam-validaci-co-program-umi">Chci vidět seznam validací, co program umí</a></li>
+<li><a class="reference internal" href="#chci-videt-informace-o-jedne-validaci">Chci vidět informace o jedné validaci</a></li>
+<li><a class="reference internal" href="#chci-videt-pouze-vysledky-na-konci">Chci vidět pouze výsledky na konci</a></li>
+<li><a class="reference internal" href="#chci-videt-vysledky-i-prubeh-validace">Chci vidět výsledky i průběh validace</a></li>
+<li><a class="reference internal" href="#chci-provest-jen-urcitou-validaci">Chci provést jen určitou validaci</a></li>
+<li><a class="reference internal" href="#chci-zachovat-rozbaleny-balicek">Chci zachovat rozbalený balíček</a></li>
+<li><a class="reference internal" href="#kdyz-program-vypisuje-hodne-chyb">Když program vypisuje hodně chyb</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">PSP Validator 0.8.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jan Stavěl.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
