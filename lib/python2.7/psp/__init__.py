@@ -14,26 +14,30 @@ class NoProperDirectoryInZipFile(Exception):
 
 class PSP(object):
     """ umí rozbalit balíček do zadaného pracovního adresáře.
-    Umí poskytovat přístup k jednotlivým částem balíčku"""
+    Umí poskytovat přístup k jednotlivým částem balíčku.
+    
+    Pokud je fpath adresar, bere to jako rozbaleny PSP balicek.
+    """
 
     def __init__(self, fpath):
         self.fpath = fpath
         self.archive = None
-        if not os.path.isdir(fpath):
-            self.fpath = fpath
-            self.archive = zipfile.ZipFile(self.fpath,"r")
-            self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
-        else:
-            self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
-        self.dirname = workdir.join(self.basename)
         self._unzipped = False
-        #self._unzipped = True
+        self.basename = os.path.basename(os.path.splitext(os.path.splitext(self.fpath)[0])[0])
+
+        if not os.path.isdir(fpath):
+            self.archive = zipfile.ZipFile(self.fpath,"r")
+            # self.dirname is known after zip file is unzipped
+        else:
+            self.dirname = fpath
+            self._unzipped = True
         
     def __str__(self):
         return self.fpath
 
     def _unzip(self):
         self.archive.extractall(str(workdir))
+        self.dirname = workdir.join(self.basename)
         self._unzipped = True
         
     @property

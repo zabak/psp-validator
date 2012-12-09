@@ -18,7 +18,7 @@ class Validator(object):
         self.catalog = Catalog()
         self.results = []
         self.logger = logger
-        self.logger.info("budu validovat soubor: " + psp.fpath)
+        self.logger.info("budu validovat: " + psp.fpath)
 
     @classmethod
     def short_desc_of_validator(self,name):
@@ -76,7 +76,7 @@ class Validator(object):
         return self.results
 
     def validate(self, condition=lambda name: True):
-        """ zavolá všechny validace, co odpovídají argumentům programu.
+        """ zavola vsechny validace, co odpovidaji argumentum programu.
         Pokud je zadana metoda. Zavola jen jedno dotycnou validaci.
         napr: 01_mets
         """
@@ -97,8 +97,8 @@ class Validator(object):
         pass
 
     def validate_01_mets(self):
-        """ validace hlavního METS souboru
-        validuje hlavní METS soubor podle specifikace METS"""
+        """ validace hlavniho METS souboru
+        validuje hlavni METS soubor podle specifikace METS"""
         mets = self.psp.mets
         schema = self.catalog.mets
         self.logger.debug("volam schema.validate")
@@ -109,8 +109,8 @@ class Validator(object):
         return result
 
     def validate_01_mets_mods(self):
-        """ validace vnitřku hlavního METS souboru, specifikace MODS
-        validuje vnitřní položky MODS v hlavním METS soubor podle specifikace MODS"""
+        """ validace vnitrku hlavniho METS souboru, specifikace MODS
+        validuje vnitrni polozky MODS v hlavnim METS soubor podle specifikace MODS"""
         mets = self.psp.mets
         elems = mets.etree.xpath("//mods:mods",  namespaces = self.catalog.namespaces)
         if len(elems) == 0:
@@ -129,8 +129,8 @@ class Validator(object):
         return True
 
     def validate_01_mets_dc(self):
-        """ validace vnitřku METS souboru, specifikace DC
-        validuje vnitřní položky DC v METS soubor podle specifikace Dublin Core"""
+        """ validace vnitrku METS souboru, specifikace DC
+        validuje vnitrni polozky DC v METS soubor podle specifikace Dublin Core"""
         mets = self.psp.mets
         elems = mets.etree.xpath("//dc:dc", namespaces = self.catalog.namespaces)
         if len(elems) == 0:
@@ -149,8 +149,8 @@ class Validator(object):
         return True
 
     def validate_02_links_exist(self):
-        """ validace linek v hlavním METS souboru
-        zkontroluje, zda existují všechny soubory na které se odkazují linky v hlavním souboru METS."""
+        """ validace linek v hlavnim METS souboru
+        zkontroluje, zda existuji vsechny soubory na ktere se odkazuji linky v hlavnim souboru METS."""
         
         hrefs = self.psp.mets.xpath("//mets:file/mets:FLocat/@xlink:href", namespaces=self.catalog.namespaces)
 
@@ -163,8 +163,8 @@ class Validator(object):
         return self.for_each(hrefs, validator)
 
     def validate_02_links_checksums(self):
-        """ kontrola CHECKSUM všech souborů na které se v hlavním METS souboru odkazuje
-        zkontroluje, zda mají soubory, na které linky odkazují, správnou CHECKSUM."""
+        """ kontrola CHECKSUM vsech souboru na ktere se v hlavnim METS souboru odkazuje
+        zkontroluje, zda maji soubory, na ktere linky odkazuji, spravnou CHECKSUM."""
 
         mets_files = self.psp.mets.xpath("//mets:file", namespaces=self.catalog.namespaces)
 
@@ -187,8 +187,8 @@ class Validator(object):
         return self.for_each(mets_files, validator)
    
     def validate_03_techspecs(self):
-        """ validace souborů ve složce amdSec
-        zkontroluje předběžně jednotlivé soubory ve složce =amdSec= podle formátu METS"""
+        """ validace souboru ve slozce amdSec
+        zkontroluje predbezne jednotlive soubory ve slozce =amdSec= podle formatu METS"""
 
         paths = self.psp.mets.xpath("//mets:fileGrp[@ID='TECHMDGRP']/mets:file/mets:FLocat/@xlink:href",
                                     namespaces = self.catalog.namespaces
@@ -218,16 +218,16 @@ class Validator(object):
         return self.for_each(fpaths, validator)
 
     def validate_03_techspecs_premis_mix(self):
-        """ validace souborů ve složce amdSec na technická metadata
-        zkontroluje, zda jednotlivé soubory odpovídají použitým schematům.
-        To je formát METS a vevnitřs jsou polozky =premis:object= podle schematu PREMIS v2.1. a položky =mix:mix= ve formatu MIX"""
+        """ validace souboru ve slozce amdSec na technicka metadata
+        zkontroluje, zda jednotlive soubory odpovidaji pouzitym schematum.
+        To je format METS a vevnitrs jsou polozky =premis:object= podle schematu PREMIS v2.1. a polozky =mix:mix= ve formatu MIX"""
 
         paths = self.psp.mets.xpath("//mets:fileGrp[@ID='TECHMDGRP']/mets:file/mets:FLocat/@xlink:href", 
                                     namespaces = self.catalog.namespaces)
         fpaths = [ self.psp.join(fp) for fp in paths ]
 
         def validator(self,fpath):
-            """validace jednotlivých PREMIS a MIX částí"""
+            """validace jednotlivych PREMIS a MIX casti"""
             self.logger.debug("validuji: " + fpath)
             premis = self.catalog.premis
             mix = self.catalog.mix
@@ -256,8 +256,8 @@ class Validator(object):
         #return self.for_each([fpaths[0]], validator)
 
     def validat_04_altos(self):
-        """ validace souborů v adresáři =ALTO=
-        zkontroluje předběžně každý soubor ve složce ALTO podle schematu ALTO"""
+        """ validace souboru v adresari =ALTO=
+        zkontroluje predbezne kazdy soubor ve slozce ALTO podle schematu ALTO"""
 
         paths = self.psp.mets.xpath("//mets:fileGrp[@ID='ALTOGRP']/mets:file/mets:FLocat/@xlink:href",
                                     namespaces = self.catalog.namespaces)
